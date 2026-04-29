@@ -171,9 +171,9 @@
 }
 
 /* ── Category color fills ── */
-.c-stocks     { background: #2d5a3d; }
-.c-emergency  { background: #1a3a5c; }
-.c-retirement { background: #8a4a1a; }
+.c-stocks     { background: #398be0; }
+.c-emergency  { background: #1f9e75; }
+.c-retirement { background: #e9a327; }
 
 /* ── Responsive ── */
 @media (max-width: 700px) {

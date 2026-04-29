@@ -19,9 +19,9 @@
   --warn:         #8a4a1a;
   --warn-light:   #f5ece3;
 
-  --font-display: 'DM Serif Display', serif;
-  --font-body:    'DM Sans', sans-serif;
-  --font-mono:    'DM Mono', monospace;
+  --font-display: 'Roboto', sans-serif;
+  --font-body: 'Google Sans', sans-serif;
+  --font-mono: 'Google Sans', sans-serif;
 }
 
 *, *::before, *::after {

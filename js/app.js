@@ -29,9 +29,9 @@ function addRow(sectionKey, market) {
       col2: '',
       col3: '',
       col4: '0',
-      col5: '',               // current price, renderer expects this
+      col5: '',
       currency: market === 'TW' ? 'TWD' : (market === 'ID' ? 'IDR' : 'USD'),
-      market: market || 'US'  // "US", "TW", or "ID"
+      market: market || 'US'
     });
 
     savePortfolio(appData);
@@ -41,7 +41,7 @@ function addRow(sectionKey, market) {
     return;
   }
 
-  // emergency / retirement keep using renderSection
+  // emergency / retirement
   appData[sectionKey].push({
     col1: '',
     col2: '',
@@ -59,11 +59,14 @@ function onFXChange() {
   const twd = parseFloat(document.getElementById('fx-twd').value);
   const idr = parseFloat(document.getElementById('fx-idr').value);
   saveFXRates(twd, idr);
-  Object.keys(CONFIG.SECTIONS).forEach(sectionKey => {
-    renderSection(sectionKey, appData[sectionKey]);
-  });
+
+  // Re-render sections with new FX
+  renderStocks(appData.stocks || []);
+  renderSection('emergency', appData.emergency || []);
+  renderSection('retirement', appData.retirement || []);
+
   updateDashboard(appData);
-  updateMarketChart(appData.stocks);
+  updateMarketChart(appData.stocks || []);
 }
 
 /** Initialise everything */
@@ -77,16 +80,19 @@ function init() {
   appData = loadPortfolio();
 
   // 3. Render all sections
-  Object.keys(CONFIG.SECTIONS).forEach(sectionKey => {
-    renderSection(sectionKey, appData[sectionKey]);
-  });
+  // Stocks: use renderStocks for split tables
+  renderStocks(appData.stocks || []);
+
+  // Emergency / retirement: still via renderSection
+  renderSection('emergency', appData.emergency || []);
+  renderSection('retirement', appData.retirement || []);
 
   // 4. Compute initial dashboard totals
   updateDashboard(appData);
 
   // 5. Init and populate pie chart
   initMarketChart();
-  updateMarketChart(appData.stocks);
+  updateMarketChart(appData.stocks || []);
 
   // 6. Wire FX inputs
   document.getElementById('fx-twd').addEventListener('input', onFXChange);

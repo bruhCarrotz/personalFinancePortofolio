@@ -7,4 +7,4 @@ Further improvement such as dynamic stock and currencies pricing, simple databas
 ## Documentation & Fixes
 **2026/04/29** : Initial Commit
 * Developed the core structure, functionality, aesthetics of the webpage.
-  
+* Stock and ETF functionality is currently using static values, so it does not yet reflect real-time market growth or performance.

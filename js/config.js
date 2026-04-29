@@ -38,7 +38,7 @@ const CONFIG = {
     stocks: {
       valueMode: 'product',
       col1: 'e.g. VTI',
-      col2: 'e.g. Firstrade',
+      col2: 'e.g. 2026-04-29',
       col3: 'e.g. 10',
       col4: 'e.g. 245.00',
     },

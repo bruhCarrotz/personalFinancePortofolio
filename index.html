@@ -15,7 +15,7 @@
   <header>
     <div>
       <h1>My Portfolio</h1>
-      <p>Personal investment tracker — net worth overview</p>
+      <p>Personal Investment Calculator</p>
     </div>
     <span class="last-updated" id="last-updated"></span>
   </header>
@@ -37,7 +37,7 @@
           <label>IDR</label>
         </div>
       </div>
-      <span class="fx-note">All totals converted to USD</span>
+      <span class="fx-note">All totals are to be converted to USD</span>
     </div>
 
     <!-- Net Worth Banner -->
@@ -87,7 +87,7 @@
       <table class="holdings-table" id="stocks-table">
         <thead>
           <tr>
-            <th>Name / Ticker</th>
+            <th>Ticker</th>
             <th>Date</th>
             <th class="num">Units</th>
             <th class="num">Price</th>
@@ -98,7 +98,7 @@
         </thead>
         <tbody id="stocks-body"></tbody>
       </table>
-      <button class="add-row-btn" onclick="addRow('stocks')">+ Add holding</button>
+      <button class="add-row-btn" onclick="addRow('stocks')">+ Add Holdings</button>
     </div>
 
     <!-- Emergency Fund -->
@@ -119,7 +119,7 @@
         </thead>
         <tbody id="emergency-body"></tbody>
       </table>
-      <button class="add-row-btn" onclick="addRow('emergency')">+ Add account</button>
+      <button class="add-row-btn" onclick="addRow('emergency')">+ Add Account</button>
     </div>
 
     <!-- Retirement -->
@@ -141,7 +141,7 @@
         </thead>
         <tbody id="retirement-body"></tbody>
       </table>
-      <button class="add-row-btn" onclick="addRow('retirement')">+ Add account</button>
+      <button class="add-row-btn" onclick="addRow('retirement')">+ Add Account</button>
     </div>
 
   </main>

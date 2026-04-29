@@ -37,7 +37,7 @@ const CONFIG = {
   SECTIONS: {
     stocks: {
       valueMode: 'product',
-      col1: 'e.g. VTI',
+      col1: 'e.g. VT, 00878',
       col2: '',            // date — uses <input type="date">, no placeholder needed
       col3: 'e.g. 10',    // units
       col4: 'e.g. 245.00', // price
@@ -45,13 +45,13 @@ const CONFIG = {
     emergency: {
       valueMode: 'direct',
       col1: '',            // date — uses <input type="date">
-      col4: 'e.g. 50000000', // amount
+      col4: 'e.g. 500', // amount
     },
     retirement: {
       valueMode: 'direct',
       col1: '',            // date — uses <input type="date">
       col2: 'e.g. BPJS',  // provider
-      col4: 'e.g. 120000000', // balance
+      col4: 'e.g. 1200', // balance
     },
   },
 

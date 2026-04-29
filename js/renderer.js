@@ -51,7 +51,7 @@ function buildRow(sectionKey, row, idx) {
   const tr = document.createElement('tr');
 
   if (isStocks) {
-    // Name/Ticker | Date | Units | Price | (currency + usd + del appended below)
+    // Name | Date | Units | Buy Price | Current Price | Market | (currency+usd+gl+del below)
     tr.appendChild(makeTextCell(row.col1, meta.col1, (v) => {
       appData.stocks[idx].col1 = v; savePortfolio(appData);
     }));
@@ -65,13 +65,40 @@ function buildRow(sectionKey, row, idx) {
       updateRowUSDCell('stocks', idx, tr);
     }));
     tr.appendChild(tdUnits);
-    const tdPrice = document.createElement('td');
-    tdPrice.className = 'num';
-    tdPrice.appendChild(makeNumberInput(row.col4, meta.col4, (v) => {
+    // Buy price (reference only — does not affect net worth)
+    const tdBuy = document.createElement('td');
+    tdBuy.className = 'num';
+    tdBuy.appendChild(makeNumberInput(row.col4, meta.col4, (v) => {
       appData.stocks[idx].col4 = v; savePortfolio(appData);
       updateRowUSDCell('stocks', idx, tr);
     }));
-    tr.appendChild(tdPrice);
+    tr.appendChild(tdBuy);
+    // Current price (drives net worth value)
+    const tdCurrent = document.createElement('td');
+    tdCurrent.className = 'num';
+    tdCurrent.appendChild(makeNumberInput(row.col5, meta.col5, (v) => {
+      appData.stocks[idx].col5 = v; savePortfolio(appData);
+      updateRowUSDCell('stocks', idx, tr);
+    }));
+    tr.appendChild(tdCurrent);
+    // Market select (US / TW / ID)
+    const tdMarket = document.createElement('td');
+    tdMarket.className = 'num';
+    const msel = document.createElement('select');
+    msel.className = 'tag tag-market';
+    ['US','TW','ID'].forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m; opt.textContent = m;
+      if ((row.market || 'US') === m) opt.selected = true;
+      msel.appendChild(opt);
+    });
+    msel.addEventListener('change', () => {
+      appData.stocks[idx].market = msel.value;
+      savePortfolio(appData);
+      updateMarketChart(appData.stocks);
+    });
+    tdMarket.appendChild(msel);
+    tr.appendChild(tdMarket);
 
   } else if (sectionKey === 'emergency') {
     // Date | Amount | (currency + usd + del appended below)
@@ -129,6 +156,16 @@ function buildRow(sectionKey, row, idx) {
   tdUSD.textContent = fmtUSD(val);
   tr.appendChild(tdUSD);
 
+  // G/L cell — stocks only
+  if (isStocks) {
+    const tdGL = document.createElement('td');
+    tdGL.className = 'num gl-cell';
+    const { diff, pct } = rowGainLoss(row);
+    tdGL.textContent = (diff >= 0 ? '+' : '') + fmtUSD(diff) + ' (' + pct.toFixed(1) + '%)';
+    tdGL.style.color = diff >= 0 ? 'var(--accent)' : '#c0392b';
+    tr.appendChild(tdGL);
+  }
+
   // Delete button
   const tdDel = document.createElement('td');
   const delBtn = document.createElement('button');
@@ -154,10 +191,19 @@ function renderSection(sectionKey, rows) {
   rows.forEach((row, idx) => tbody.appendChild(buildRow(sectionKey, row, idx)));
 }
 
-/* ── Refresh just the USD cell of one row (fast path on keystroke) ── */
+/* ── Refresh just the USD and G/L cells of one row (fast path on keystroke) ── */
 function updateRowUSDCell(sectionKey, idx, tr) {
   const row = appData[sectionKey][idx];
   tr.querySelector('.usd-cell').textContent = fmtUSD(rowValueUSD(sectionKey, row));
+  if (sectionKey === 'stocks') {
+    const glCell = tr.querySelector('.gl-cell');
+    if (glCell) {
+      const { diff, pct } = rowGainLoss(row);
+      glCell.textContent = (diff >= 0 ? '+' : '') + fmtUSD(diff) + ' (' + pct.toFixed(1) + '%)';
+      glCell.style.color = diff >= 0 ? 'var(--accent)' : '#c0392b';
+    }
+    updateMarketChart(appData.stocks);
+  }
   updateDashboard(appData);
 }
 

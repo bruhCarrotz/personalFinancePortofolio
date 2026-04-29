@@ -24,13 +24,28 @@
 function rowValueUSD(sectionKey, row) {
   const mode = CONFIG.SECTIONS[sectionKey].valueMode;
   if (mode === 'product') {
-    // stocks: units × price
-    const units = parseFloat(row.col3 || 0);
-    const price = parseFloat(row.col4 || 0);
-    return convertToUSD(units * price, row.currency);
+    // stocks: units × current price (col5). Fall back to buy price (col4) if col5 not set yet.
+    const units        = parseFloat(row.col3 || 0);
+    const currentPrice = parseFloat(row.col5 || row.col4 || 0);
+    return convertToUSD(units * currentPrice, row.currency);
   }
-  // emergency / retirement: just the balance figure
   return convertToUSD(parseFloat(row.col4 || 0), row.currency);
+}
+
+/** Cost basis in USD for a stock row (units × buy price) */
+function rowCostUSD(row) {
+  const units    = parseFloat(row.col3 || 0);
+  const buyPrice = parseFloat(row.col4 || 0);
+  return convertToUSD(units * buyPrice, row.currency);
+}
+
+/** Gain/loss USD and percentage for a stock row */
+function rowGainLoss(row) {
+  const value = rowValueUSD('stocks', row);
+  const cost  = rowCostUSD(row);
+  const diff  = value - cost;
+  const pct   = cost > 0 ? (diff / cost * 100) : 0;
+  return { diff, pct };
 }
 
 function sectionTotalUSD(sectionKey, rows) {

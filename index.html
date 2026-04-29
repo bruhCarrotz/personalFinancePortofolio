@@ -15,7 +15,7 @@
   <header>
     <div>
       <h1>My Portfolio</h1>
-      <p>Personal Investment Calculator</p>
+      <p>Personal investment tracker — net worth overview</p>
     </div>
     <span class="last-updated" id="last-updated"></span>
   </header>
@@ -37,7 +37,7 @@
           <label>IDR</label>
         </div>
       </div>
-      <span class="fx-note">All totals are to be converted to USD</span>
+      <span class="fx-note">All totals converted to USD</span>
     </div>
 
     <!-- Net Worth Banner -->
@@ -84,21 +84,33 @@
         <span class="section-title">Stocks &amp; ETFs</span>
         <span class="section-total" id="stocks-total">USD $0</span>
       </div>
-      <table class="holdings-table" id="stocks-table">
-        <thead>
-          <tr>
-            <th>Ticker</th>
-            <th>Date</th>
-            <th class="num">Units</th>
-            <th class="num">Price</th>
-            <th class="num">Currency</th>
-            <th class="num">Value (USD)</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="stocks-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addRow('stocks')">+ Add Holdings</button>
+      <div class="stocks-layout">
+        <div class="stocks-table-wrap">
+          <table class="holdings-table" id="stocks-table">
+            <thead>
+              <tr>
+                <th>Name / Ticker</th>
+                <th>Date</th>
+                <th class="num">Units</th>
+                <th class="num">Buy Price</th>
+                <th class="num">Current Price</th>
+                <th class="num">Market</th>
+                <th class="num">Currency</th>
+                <th class="num">Value (USD)</th>
+                <th class="num">G/L</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="stocks-body"></tbody>
+          </table>
+          <button class="add-row-btn" onclick="addRow('stocks')">+ Add holding</button>
+        </div>
+        <div class="stocks-chart-wrap">
+          <div class="chart-title">By Market</div>
+          <canvas id="market-pie"></canvas>
+          <div id="chart-legend" class="chart-legend"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Emergency Fund -->
@@ -119,7 +131,7 @@
         </thead>
         <tbody id="emergency-body"></tbody>
       </table>
-      <button class="add-row-btn" onclick="addRow('emergency')">+ Add Account</button>
+      <button class="add-row-btn" onclick="addRow('emergency')">+ Add account</button>
     </div>
 
     <!-- Retirement -->
@@ -141,7 +153,7 @@
         </thead>
         <tbody id="retirement-body"></tbody>
       </table>
-      <button class="add-row-btn" onclick="addRow('retirement')">+ Add Account</button>
+      <button class="add-row-btn" onclick="addRow('retirement')">+ Add account</button>
     </div>
 
   </main>
@@ -150,12 +162,16 @@
     All data is stored locally in your browser. Nothing is sent to any server.
   </footer>
 
+  <!-- Chart.js for pie chart -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
   <!-- Load JS modules in dependency order -->
   <script src="js/config.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/fx.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/renderer.js"></script>
+  <script src="js/chart.js"></script>
   <script src="js/app.js"></script>
 
 </body>

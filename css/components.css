@@ -67,8 +67,8 @@
 
 /* ── Net Worth Banner ── */
 .net-worth-banner {
-  background: var(--text);
-  color: white;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 2rem 2.5rem;
   margin-bottom: 2.5rem;
@@ -81,7 +81,7 @@
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.6;
+  color: var(--muted);
   margin-bottom: 6px;
 }
 .net-worth-banner .amount {
@@ -89,10 +89,11 @@
   font-size: 2.6rem;
   font-weight: 400;
   line-height: 1;
+  color: var(--text);
 }
 .net-worth-banner .base-currency {
   font-size: 12px;
-  opacity: 0.5;
+  color: var(--muted);
   margin-top: 6px;
   font-family: var(--font-mono);
 }
@@ -104,8 +105,8 @@
   flex-wrap: wrap;
 }
 .pill {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--surface2);
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.6rem 1rem;
   text-align: center;
@@ -113,7 +114,7 @@
 }
 .pill .pill-label {
   font-size: 11px;
-  opacity: 0.6;
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 4px;
@@ -122,6 +123,7 @@
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 500;
+  color: var(--text);
 }
 
 /* ── Allocation Bar ── */
@@ -184,5 +186,97 @@
   }
   .net-worth-banner .amount {
     font-size: 2rem;
+  }
+}
+
+/* ── Stocks section: table + chart side by side ── */
+.stocks-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+.stocks-table-wrap {
+  flex: 1;
+  min-width: 0;
+}
+.stocks-chart-wrap {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.chart-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 500;
+  align-self: flex-start;
+}
+#market-pie {
+  width: 160px !important;
+  height: 160px !important;
+}
+.chart-legend {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.chart-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.chart-legend-name {
+  flex: 1;
+  color: var(--muted);
+  font-size: 11px;
+}
+.chart-legend-pct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+  font-weight: 500;
+}
+.chart-legend-val {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* ── Market tag ── */
+.tag-market {
+  background: var(--surface2);
+  color: var(--muted);
+}
+
+/* ── Responsive: stack chart below table on small screens ── */
+@media (max-width: 900px) {
+  .stocks-layout {
+    flex-direction: column;
+  }
+  .stocks-chart-wrap {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #market-pie {
+    width: 120px !important;
+    height: 120px !important;
   }
 }

@@ -31,30 +31,43 @@ function addRow(sectionKey) {
 
 /** Re-render every section's USD cells after an FX rate change */
 function onFXChange() {
+  const twd = parseFloat(document.getElementById('fx-twd').value);
+  const idr = parseFloat(document.getElementById('fx-idr').value);
+  saveFXRates(twd, idr);
   Object.keys(CONFIG.SECTIONS).forEach(sectionKey => {
     renderSection(sectionKey, appData[sectionKey]);
   });
   updateDashboard(appData);
+  updateMarketChart(appData.stocks);
 }
 
 /** Initialise everything */
 function init() {
-  // 1. Load data
+  // 1. Load and apply saved FX rates
+  const savedFX = loadFXRates();
+  document.getElementById('fx-twd').value = savedFX.TWD;
+  document.getElementById('fx-idr').value = savedFX.IDR;
+
+  // 2. Load portfolio data
   appData = loadPortfolio();
 
-  // 2. Render all sections
+  // 3. Render all sections
   Object.keys(CONFIG.SECTIONS).forEach(sectionKey => {
     renderSection(sectionKey, appData[sectionKey]);
   });
 
-  // 3. Compute initial dashboard totals
+  // 4. Compute initial dashboard totals
   updateDashboard(appData);
 
-  // 4. Wire FX inputs
+  // 5. Init and populate pie chart
+  initMarketChart();
+  updateMarketChart(appData.stocks);
+
+  // 6. Wire FX inputs
   document.getElementById('fx-twd').addEventListener('input', onFXChange);
   document.getElementById('fx-idr').addEventListener('input', onFXChange);
 
-  // 5. Timestamp
+  // 7. Timestamp
   document.getElementById('last-updated').textContent =
     'Updated ' + new Date().toLocaleDateString('en-US', {
       year: 'numeric', month: 'short', day: 'numeric',

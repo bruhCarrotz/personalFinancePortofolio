@@ -20,152 +20,192 @@
     <span class="last-updated" id="last-updated"></span>
   </header>
 
-  <main>
+  <div class="page-body">
 
-    <!-- FX Rate Controls -->
-    <div class="fx-bar">
-      <span class="fx-label">FX rates to USD</span>
-      <div class="fx-inputs">
-        <div class="fx-field">
-          <label>1 USD =</label>
-          <input type="number" id="fx-twd" value="32.5" step="0.01" min="0.01">
-          <label>TWD</label>
-        </div>
-        <div class="fx-field">
-          <label>1 USD =</label>
-          <input type="number" id="fx-idr" value="16100" step="1" min="1">
-          <label>IDR</label>
-        </div>
+    <!-- ── LEFT SIDEBAR: Pie chart ── -->
+    <aside class="sidebar">
+      <div class="sidebar-chart-card">
+        <div class="sidebar-chart-title">By Market</div>
+        <canvas id="market-pie"></canvas>
+        <div id="chart-legend" class="chart-legend"></div>
       </div>
-      <span class="fx-note">All totals converted to USD</span>
-    </div>
+    </aside>
 
-    <!-- Net Worth Banner -->
-    <div class="net-worth-banner">
-      <div>
-        <div class="label">Total Net Worth</div>
-        <div class="amount" id="net-worth-total">$0</div>
-        <div class="base-currency">Investments + Emergency + Retirement · in USD</div>
-      </div>
-      <div class="breakdown-pills">
-        <div class="pill">
-          <div class="pill-label">Stocks / ETFs</div>
-          <div class="pill-value" id="pill-stocks">$0</div>
-        </div>
-        <div class="pill">
-          <div class="pill-label">Emergency Fund</div>
-          <div class="pill-value" id="pill-emergency">$0</div>
-        </div>
-        <div class="pill">
-          <div class="pill-label">Retirement</div>
-          <div class="pill-value" id="pill-retirement">$0</div>
-        </div>
-      </div>
-    </div>
+    <!-- ── RIGHT COLUMN: all content blocks ── -->
+    <main class="content">
 
-    <!-- Allocation Bar -->
-    <div class="alloc-bar-wrap">
-      <div class="alloc-title">Allocation</div>
-      <div class="alloc-bar" id="alloc-bar">
-        <span id="bar-stocks"    class="c-stocks"     style="width:0%"></span>
-        <span id="bar-emergency" class="c-emergency"  style="width:0%"></span>
-        <span id="bar-retirement"class="c-retirement" style="width:0%"></span>
-      </div>
-      <div class="alloc-legend">
-        <div class="legend-item"><div class="legend-dot c-stocks"></div>    <span id="leg-stocks">Stocks / ETFs — 0%</span></div>
-        <div class="legend-item"><div class="legend-dot c-emergency"></div> <span id="leg-emergency">Emergency — 0%</span></div>
-        <div class="legend-item"><div class="legend-dot c-retirement"></div><span id="leg-retirement">Retirement — 0%</span></div>
-      </div>
-    </div>
-
-    <!-- Stocks / ETFs -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-title">Stocks &amp; ETFs</span>
-        <span class="section-total" id="stocks-total">USD $0</span>
-      </div>
-      <div class="stocks-layout">
-        <div class="stocks-table-wrap">
-          <table class="holdings-table" id="stocks-table">
-            <thead>
-              <tr>
-                <th>Name / Ticker</th>
-                <th>Date</th>
-                <th class="num">Units</th>
-                <th class="num">Buy Price</th>
-                <th class="num">Current Price</th>
-                <th class="num">Market</th>
-                <th class="num">Currency</th>
-                <th class="num">Value (USD)</th>
-                <th class="num">G/L</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="stocks-body"></tbody>
-          </table>
-          <button class="add-row-btn" onclick="addRow('stocks')">+ Add holding</button>
+      <!-- FX Rates -->
+      <div class="fx-bar">
+        <span class="fx-label">FX rates to USD</span>
+        <div class="fx-inputs">
+          <div class="fx-field">
+            <label>1 USD =</label>
+            <input type="number" id="fx-twd" value="32.5" step="0.01" min="0.01">
+            <label>TWD</label>
+          </div>
+          <div class="fx-field">
+            <label>1 USD =</label>
+            <input type="number" id="fx-idr" value="16100" step="1" min="1">
+            <label>IDR</label>
+          </div>
         </div>
-        <div class="stocks-chart-wrap">
-          <div class="chart-title">By Market</div>
-          <canvas id="market-pie"></canvas>
-          <div id="chart-legend" class="chart-legend"></div>
+        <span class="fx-note">All totals converted to USD</span>
+      </div>
+
+      <!-- Net Worth -->
+      <div class="net-worth-banner">
+        <div>
+          <div class="label">Total Net Worth</div>
+          <div class="amount" id="net-worth-total">$0</div>
+          <div class="base-currency">Stocks + Emergency + Retirement · in USD</div>
+        </div>
+        <div class="breakdown-pills">
+          <div class="pill">
+            <div class="pill-label">Stocks / ETFs</div>
+            <div class="pill-value" id="pill-stocks">$0</div>
+          </div>
+          <div class="pill">
+            <div class="pill-label">Emergency Fund</div>
+            <div class="pill-value" id="pill-emergency">$0</div>
+          </div>
+          <div class="pill">
+            <div class="pill-label">Retirement</div>
+            <div class="pill-value" id="pill-retirement">$0</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Emergency Fund -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-title">Emergency Fund</span>
-        <span class="section-total" id="emergency-total">USD $0</span>
+      <!-- Allocation Bar -->
+      <div class="alloc-bar-wrap">
+        <div class="alloc-title">Allocation</div>
+        <div class="alloc-bar">
+          <span id="bar-stocks"     class="c-stocks"     style="width:0%"></span>
+          <span id="bar-emergency"  class="c-emergency"  style="width:0%"></span>
+          <span id="bar-retirement" class="c-retirement" style="width:0%"></span>
+        </div>
+        <div class="alloc-legend">
+          <div class="legend-item"><div class="legend-dot c-stocks"></div>    <span id="leg-stocks">Stocks / ETFs — 0%</span></div>
+          <div class="legend-item"><div class="legend-dot c-emergency"></div> <span id="leg-emergency">Emergency — 0%</span></div>
+          <div class="legend-item"><div class="legend-dot c-retirement"></div><span id="leg-retirement">Retirement — 0%</span></div>
+        </div>
       </div>
-      <table class="holdings-table" id="emergency-table">
-        <thead>
-          <tr>
+
+      <!-- US Stocks -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">🇺🇸 US Stocks &amp; ETFs</span>
+          <span class="section-total" id="stocks-us-total">USD $0</span>
+        </div>
+        <table class="holdings-table">
+          <thead><tr>
+            <th>Name / Ticker</th>
+            <th>Date</th>
+            <th class="num">Units</th>
+            <th class="num">Buy Price</th>
+            <th class="num">Current Price</th>
+            <th class="num">Currency</th>
+            <th class="num">Value (USD)</th>
+            <th class="num">G/L</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="stocks-us-body"></tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('stocks','US')">+ Add US holding</button>
+      </div>
+
+      <!-- TW Stocks -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">🇹🇼 Taiwan Stocks &amp; ETFs</span>
+          <span class="section-total" id="stocks-tw-total">USD $0</span>
+        </div>
+        <table class="holdings-table">
+          <thead><tr>
+            <th>Name / Ticker</th>
+            <th>Date</th>
+            <th class="num">Units</th>
+            <th class="num">Buy Price</th>
+            <th class="num">Current Price</th>
+            <th class="num">Currency</th>
+            <th class="num">Value (USD)</th>
+            <th class="num">G/L</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="stocks-tw-body"></tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('stocks','TW')">+ Add TW holding</button>
+      </div>
+
+      <!-- ID Stocks -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">🇮🇩 Indonesia Stocks &amp; ETFs</span>
+          <span class="section-total" id="stocks-id-total">USD $0</span>
+        </div>
+        <table class="holdings-table">
+          <thead><tr>
+            <th>Name / Ticker</th>
+            <th>Date</th>
+            <th class="num">Units</th>
+            <th class="num">Buy Price</th>
+            <th class="num">Current Price</th>
+            <th class="num">Currency</th>
+            <th class="num">Value (USD)</th>
+            <th class="num">G/L</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="stocks-id-body"></tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('stocks','ID')">+ Add ID holding</button>
+      </div>
+
+      <!-- Emergency Fund -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Emergency Fund</span>
+          <span class="section-total" id="emergency-total">USD $0</span>
+        </div>
+        <table class="holdings-table">
+          <thead><tr>
             <th>Date</th>
             <th class="num">Amount</th>
             <th class="num">Currency</th>
             <th class="num">Value (USD)</th>
             <th></th>
-          </tr>
-        </thead>
-        <tbody id="emergency-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addRow('emergency')">+ Add account</button>
-    </div>
-
-    <!-- Retirement -->
-    <div class="section">
-      <div class="section-header">
-        <span class="section-title">Retirement</span>
-        <span class="section-total" id="retirement-total">USD $0</span>
+          </tr></thead>
+          <tbody id="emergency-body"></tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('emergency')">+ Add account</button>
       </div>
-      <table class="holdings-table" id="retirement-table">
-        <thead>
-          <tr>
+
+      <!-- Retirement -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Retirement</span>
+          <span class="section-total" id="retirement-total">USD $0</span>
+        </div>
+        <table class="holdings-table">
+          <thead><tr>
             <th>Date</th>
             <th>Provider</th>
             <th class="num">Balance</th>
             <th class="num">Currency</th>
             <th class="num">Value (USD)</th>
             <th></th>
-          </tr>
-        </thead>
-        <tbody id="retirement-body"></tbody>
-      </table>
-      <button class="add-row-btn" onclick="addRow('retirement')">+ Add account</button>
-    </div>
+          </tr></thead>
+          <tbody id="retirement-body"></tbody>
+        </table>
+        <button class="add-row-btn" onclick="addRow('retirement')">+ Add account</button>
+      </div>
 
-  </main>
+    </main>
+  </div>
 
   <footer>
     All data is stored locally in your browser. Nothing is sent to any server.
   </footer>
 
-  <!-- Chart.js for pie chart -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-
-  <!-- Load JS modules in dependency order -->
   <script src="js/config.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/fx.js"></script>

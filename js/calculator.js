@@ -41,14 +41,15 @@ function rowCostUSD(row) {
 
 /**
  * Gain/loss for a stock row.
- * Returns null if current price (col5) hasn't been entered yet —
- * so G/L only shows once the user has filled in both buy and current price.
+ * Returns null if current price (col5) or buy price (col4) not yet entered.
  *
  * Formula:
- *   currentValue = units × currentPrice (in USD)
- *   costBasis    = units × buyPrice     (in USD, same FX rate — apples-to-apples)
- *   diff         = currentValue − costBasis
- *   pct          = diff / costBasis × 100
+ *   % G/L = ((Current Value − Cost Basis) / Cost Basis) × 100
+ *   $ G/L = Current Value − Cost Basis
+ *
+ * where:
+ *   Cost Basis    = units × buyPrice    (converted to USD)
+ *   Current Value = units × currentPrice (converted to USD)
  */
 function rowGainLoss(row) {
   const hasCurrentPrice = parseFloat(row.col5) > 0;
@@ -58,7 +59,7 @@ function rowGainLoss(row) {
   const currentValue = rowValueUSD('stocks', row);
   const costBasis    = rowCostUSD(row);
   const diff = currentValue - costBasis;
-  const pct  = costBasis > 0 ? (diff / costBasis * 100) : 0;
+  const pct  = costBasis > 0 ? ((currentValue - costBasis) / costBasis) * 100 : 0;
   return { diff, pct };
 }
 

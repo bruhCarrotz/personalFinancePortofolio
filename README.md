@@ -4,6 +4,7 @@ A personal net worth dashboard for tracking investments, emergency fund, retirem
 
 Further improvement such as dynamic stock and currencies pricing, simple database structure, etc. is in consideration and in progress.
 
+## Documentation & Fixes
 **2026/04/29** : Initial Commit
-Developed the core structure, functionality, aesthetics of the webpage.
+* Developed the core structure, functionality, aesthetics of the webpage.
   

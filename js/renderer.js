@@ -27,62 +27,90 @@ function tagClass(currency) {
   return { USD: 'tag-usd', TWD: 'tag-twd', IDR: 'tag-idr' }[currency] ?? 'tag-usd';
 }
 
+/* ── Date cell with native calendar picker ── */
+function makeDateCell(value, onChange) {
+  const td = document.createElement('td');
+  const input = document.createElement('input');
+  input.type = 'date';
+  input.value = value || '';
+  input.style.cssText = 'background:none;border:none;border-bottom:1px dashed transparent;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;padding:2px 0;width:100%;cursor:pointer;';
+  input.addEventListener('mouseover', () => input.style.borderBottomColor = 'var(--border)');
+  input.addEventListener('mouseout',  () => { if (document.activeElement !== input) input.style.borderBottomColor = 'transparent'; });
+  input.addEventListener('focus', () => input.style.borderBottomColor = 'var(--accent)');
+  input.addEventListener('blur',  () => input.style.borderBottomColor = 'transparent');
+  input.addEventListener('change', () => onChange(input.value));
+  td.appendChild(input);
+  return td;
+}
+
 /* ── Build a single editable <tr> ── */
 function buildRow(sectionKey, row, idx) {
   const meta = CONFIG.SECTIONS[sectionKey];
   const val  = rowValueUSD(sectionKey, row);
   const isStocks = sectionKey === 'stocks';
-
   const tr = document.createElement('tr');
 
-  // col1 — name/description
-  tr.appendChild(makeTextCell(row.col1, meta.col1, (v) => {
-    appData[sectionKey][idx].col1 = v;
-    savePortfolio(appData);
-  }));
-
-  // col2 — platform/institution
-  tr.appendChild(makeTextCell(row.col2, meta.col2, (v) => {
-    appData[sectionKey][idx].col2 = v;
-    savePortfolio(appData);
-  }));
-
-  // col3 — units (stocks) or text (others)
-  const td3 = document.createElement('td');
-  td3.className = 'num';
   if (isStocks) {
-    td3.appendChild(makeNumberInput(row.col3, meta.col3, (v) => {
-      appData[sectionKey][idx].col3 = v;
-      savePortfolio(appData);
-      updateRowUSDCell(sectionKey, idx, tr);
+    // Name/Ticker | Date | Units | Price | (currency + usd + del appended below)
+    tr.appendChild(makeTextCell(row.col1, meta.col1, (v) => {
+      appData.stocks[idx].col1 = v; savePortfolio(appData);
     }));
-  } else {
-    td3.appendChild(makeTextInputInline(row.col3, meta.col3, (v) => {
-      appData[sectionKey][idx].col3 = v;
-      savePortfolio(appData);
+    tr.appendChild(makeDateCell(row.col2, (v) => {
+      appData.stocks[idx].col2 = v; savePortfolio(appData);
     }));
+    const tdUnits = document.createElement('td');
+    tdUnits.className = 'num';
+    tdUnits.appendChild(makeNumberInput(row.col3, meta.col3, (v) => {
+      appData.stocks[idx].col3 = v; savePortfolio(appData);
+      updateRowUSDCell('stocks', idx, tr);
+    }));
+    tr.appendChild(tdUnits);
+    const tdPrice = document.createElement('td');
+    tdPrice.className = 'num';
+    tdPrice.appendChild(makeNumberInput(row.col4, meta.col4, (v) => {
+      appData.stocks[idx].col4 = v; savePortfolio(appData);
+      updateRowUSDCell('stocks', idx, tr);
+    }));
+    tr.appendChild(tdPrice);
+
+  } else if (sectionKey === 'emergency') {
+    // Date | Amount | (currency + usd + del appended below)
+    tr.appendChild(makeDateCell(row.col1, (v) => {
+      appData.emergency[idx].col1 = v; savePortfolio(appData);
+    }));
+    const tdAmt = document.createElement('td');
+    tdAmt.className = 'num';
+    tdAmt.appendChild(makeNumberInput(row.col4, meta.col4, (v) => {
+      appData.emergency[idx].col4 = v; savePortfolio(appData);
+      updateRowUSDCell('emergency', idx, tr);
+    }));
+    tr.appendChild(tdAmt);
+
+  } else if (sectionKey === 'retirement') {
+    // Date | Provider | Balance | (currency + usd + del appended below)
+    tr.appendChild(makeDateCell(row.col1, (v) => {
+      appData.retirement[idx].col1 = v; savePortfolio(appData);
+    }));
+    tr.appendChild(makeTextCell(row.col2, meta.col2, (v) => {
+      appData.retirement[idx].col2 = v; savePortfolio(appData);
+    }));
+    const tdBal = document.createElement('td');
+    tdBal.className = 'num';
+    tdBal.appendChild(makeNumberInput(row.col4, meta.col4, (v) => {
+      appData.retirement[idx].col4 = v; savePortfolio(appData);
+      updateRowUSDCell('retirement', idx, tr);
+    }));
+    tr.appendChild(tdBal);
   }
-  tr.appendChild(td3);
 
-  // col4 — price (stocks) or balance (others)
-  const td4 = document.createElement('td');
-  td4.className = 'num';
-  td4.appendChild(makeNumberInput(row.col4, meta.col4, (v) => {
-    appData[sectionKey][idx].col4 = v;
-    savePortfolio(appData);
-    updateRowUSDCell(sectionKey, idx, tr);
-  }));
-  tr.appendChild(td4);
-
-  // col5 — currency select
-  const td5 = document.createElement('td');
-  td5.className = 'num';
+  // Currency select — shared by all sections
+  const tdCur = document.createElement('td');
+  tdCur.className = 'num';
   const sel = document.createElement('select');
   sel.className = 'tag ' + tagClass(row.currency);
   CONFIG.CURRENCIES.forEach(cur => {
     const opt = document.createElement('option');
-    opt.value = cur;
-    opt.textContent = cur;
+    opt.value = cur; opt.textContent = cur;
     if (cur === row.currency) opt.selected = true;
     sel.appendChild(opt);
   });
@@ -92,17 +120,17 @@ function buildRow(sectionKey, row, idx) {
     savePortfolio(appData);
     updateRowUSDCell(sectionKey, idx, tr);
   });
-  td5.appendChild(sel);
-  tr.appendChild(td5);
+  tdCur.appendChild(sel);
+  tr.appendChild(tdCur);
 
-  // col6 — USD value (read-only, computed)
-  const td6 = document.createElement('td');
-  td6.className = 'num usd-cell';
-  td6.textContent = fmtUSD(val);
-  tr.appendChild(td6);
+  // USD value — read-only computed
+  const tdUSD = document.createElement('td');
+  tdUSD.className = 'num usd-cell';
+  tdUSD.textContent = fmtUSD(val);
+  tr.appendChild(tdUSD);
 
-  // col7 — delete button
-  const td7 = document.createElement('td');
+  // Delete button
+  const tdDel = document.createElement('td');
   const delBtn = document.createElement('button');
   delBtn.className = 'del-btn';
   delBtn.title = 'Delete row';
@@ -113,8 +141,8 @@ function buildRow(sectionKey, row, idx) {
     renderSection(sectionKey, appData[sectionKey]);
     updateDashboard(appData);
   });
-  td7.appendChild(delBtn);
-  tr.appendChild(td7);
+  tdDel.appendChild(delBtn);
+  tr.appendChild(tdDel);
 
   return tr;
 }

@@ -38,23 +38,20 @@ const CONFIG = {
     stocks: {
       valueMode: 'product',
       col1: 'e.g. VTI',
-      col2: 'e.g. 2026-04-29',
-      col3: 'e.g. 10',
-      col4: 'e.g. 245.00',
+      col2: '',            // date — uses <input type="date">, no placeholder needed
+      col3: 'e.g. 10',    // units
+      col4: 'e.g. 245.00', // price
     },
     emergency: {
       valueMode: 'direct',
-      col1: 'e.g. BCA Savings',
-      col2: 'e.g. BCA',
-      col3: 'e.g. 6',
-      col4: 'e.g. 50000000',
+      col1: '',            // date — uses <input type="date">
+      col4: 'e.g. 50000000', // amount
     },
     retirement: {
       valueMode: 'direct',
-      col1: 'e.g. BPJS TK',
-      col2: 'e.g. BPJS',
-      col3: 'e.g. Defined Benefit',
-      col4: 'e.g. 120000000',
+      col1: '',            // date — uses <input type="date">
+      col2: 'e.g. BPJS',  // provider
+      col4: 'e.g. 120000000', // balance
     },
   },
 

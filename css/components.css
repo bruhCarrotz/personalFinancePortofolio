@@ -1,0 +1,188 @@
+/* ─────────────────────────────────────────
+   components.css
+   Reusable UI blocks:
+   · FX rate bar
+   · Net worth banner + breakdown pills
+   · Allocation bar + legend
+   · Currency color category helpers
+───────────────────────────────────────── */
+
+/* ── FX Rate Bar ── */
+.fx-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.fx-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.fx-inputs {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  flex: 1;
+}
+.fx-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fx-field label {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.fx-field input {
+  width: 90px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+.fx-field input:focus {
+  border-color: var(--accent);
+}
+.fx-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ── Net Worth Banner ── */
+.net-worth-banner {
+  background: var(--text);
+  color: white;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.net-worth-banner .label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+.net-worth-banner .amount {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 400;
+  line-height: 1;
+}
+.net-worth-banner .base-currency {
+  font-size: 12px;
+  opacity: 0.5;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+}
+
+/* ── Breakdown Pills ── */
+.breakdown-pills {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.pill {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  min-width: 120px;
+}
+.pill .pill-label {
+  font-size: 11px;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+.pill .pill-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ── Allocation Bar ── */
+.alloc-bar-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+}
+.alloc-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.alloc-bar {
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 1rem;
+}
+.alloc-bar span {
+  display: block;
+  transition: width 0.3s ease;
+}
+.alloc-legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Category color fills ── */
+.c-stocks     { background: #2d5a3d; }
+.c-emergency  { background: #1a3a5c; }
+.c-retirement { background: #8a4a1a; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .net-worth-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .net-worth-banner .amount {
+    font-size: 2rem;
+  }
+}

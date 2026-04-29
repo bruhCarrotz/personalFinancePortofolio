@@ -1,0 +1,140 @@
+/* ─────────────────────────────────────────
+   table.css
+   Everything related to the holdings tables:
+   · Table chrome (borders, hover, header)
+   · Inline editable inputs inside cells
+   · Currency tag badges (USD / TWD / IDR)
+   · Delete row button
+   · Add row button
+───────────────────────────────────────── */
+
+/* ── Table shell ── */
+.holdings-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* ── Header row ── */
+.holdings-table thead {
+  background: var(--surface2);
+}
+.holdings-table th {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 10px 16px;
+  text-align: left;
+}
+.holdings-table th.num {
+  text-align: right;
+}
+
+/* ── Data cells ── */
+.holdings-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+.holdings-table td.num {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.holdings-table tbody tr:hover {
+  background: var(--surface2);
+}
+
+/* ── Inline edit inputs inside cells ── */
+td input[type="text"],
+td input[type="number"] {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px dashed transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  padding: 2px 0;
+  transition: border-color 0.15s;
+}
+td input[type="text"]:hover,
+td input[type="number"]:hover {
+  border-bottom-color: var(--border);
+}
+td input[type="text"]:focus,
+td input[type="number"]:focus {
+  border-bottom-color: var(--accent);
+}
+td input.num-input {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* ── Currency select / tag ── */
+td select {
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.tag-usd { background: var(--accent-light);  color: var(--accent);  }
+.tag-twd { background: var(--accent2-light); color: var(--accent2); }
+.tag-idr { background: var(--warn-light);    color: var(--warn);    }
+
+/* ── Delete row button ── */
+.del-btn {
+  background: none;
+  border: none;
+  color: var(--border);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.15s;
+}
+.del-btn:hover {
+  color: #c0392b;
+}
+
+/* ── Add row button (below table) ── */
+.add-row-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-top: 1px dashed var(--border);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: color 0.15s, background 0.15s;
+}
+.add-row-btn:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* ── Responsive: hide price column on small screens ── */
+@media (max-width: 700px) {
+  .holdings-table th:nth-child(4),
+  .holdings-table td:nth-child(4) {
+    display: none;
+  }
+}

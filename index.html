@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/table.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>My Portfolio</h1>
+      <p>Personal investment tracker — net worth overview</p>
+    </div>
+    <span class="last-updated" id="last-updated"></span>
+  </header>
+
+  <main>
+
+    <!-- FX Rate Controls -->
+    <div class="fx-bar">
+      <span class="fx-label">FX rates to USD</span>
+      <div class="fx-inputs">
+        <div class="fx-field">
+          <label>1 USD =</label>
+          <input type="number" id="fx-twd" value="32.5" step="0.01" min="0.01">
+          <label>TWD</label>
+        </div>
+        <div class="fx-field">
+          <label>1 USD =</label>
+          <input type="number" id="fx-idr" value="16100" step="1" min="1">
+          <label>IDR</label>
+        </div>
+      </div>
+      <span class="fx-note">All totals converted to USD</span>
+    </div>
+
+    <!-- Net Worth Banner -->
+    <div class="net-worth-banner">
+      <div>
+        <div class="label">Total Net Worth</div>
+        <div class="amount" id="net-worth-total">$0</div>
+        <div class="base-currency">Investments + Emergency + Retirement · in USD</div>
+      </div>
+      <div class="breakdown-pills">
+        <div class="pill">
+          <div class="pill-label">Stocks / ETFs</div>
+          <div class="pill-value" id="pill-stocks">$0</div>
+        </div>
+        <div class="pill">
+          <div class="pill-label">Emergency Fund</div>
+          <div class="pill-value" id="pill-emergency">$0</div>
+        </div>
+        <div class="pill">
+          <div class="pill-label">Retirement</div>
+          <div class="pill-value" id="pill-retirement">$0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Allocation Bar -->
+    <div class="alloc-bar-wrap">
+      <div class="alloc-title">Allocation</div>
+      <div class="alloc-bar" id="alloc-bar">
+        <span id="bar-stocks"    class="c-stocks"     style="width:0%"></span>
+        <span id="bar-emergency" class="c-emergency"  style="width:0%"></span>
+        <span id="bar-retirement"class="c-retirement" style="width:0%"></span>
+      </div>
+      <div class="alloc-legend">
+        <div class="legend-item"><div class="legend-dot c-stocks"></div>    <span id="leg-stocks">Stocks / ETFs — 0%</span></div>
+        <div class="legend-item"><div class="legend-dot c-emergency"></div> <span id="leg-emergency">Emergency — 0%</span></div>
+        <div class="legend-item"><div class="legend-dot c-retirement"></div><span id="leg-retirement">Retirement — 0%</span></div>
+      </div>
+    </div>
+
+    <!-- Stocks / ETFs -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Stocks &amp; ETFs</span>
+        <span class="section-total" id="stocks-total">USD $0</span>
+      </div>
+      <table class="holdings-table" id="stocks-table">
+        <thead>
+          <tr>
+            <th>Name / Ticker</th>
+            <th>Platform</th>
+            <th class="num">Units</th>
+            <th class="num">Price</th>
+            <th class="num">Currency</th>
+            <th class="num">Value (USD)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="stocks-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('stocks')">+ Add holding</button>
+    </div>
+
+    <!-- Emergency Fund -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Emergency Fund</span>
+        <span class="section-total" id="emergency-total">USD $0</span>
+      </div>
+      <table class="holdings-table" id="emergency-table">
+        <thead>
+          <tr>
+            <th>Account / Description</th>
+            <th>Institution</th>
+            <th class="num">Months covered</th>
+            <th class="num">Amount</th>
+            <th class="num">Currency</th>
+            <th class="num">Value (USD)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="emergency-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('emergency')">+ Add account</button>
+    </div>
+
+    <!-- Retirement -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Retirement</span>
+        <span class="section-total" id="retirement-total">USD $0</span>
+      </div>
+      <table class="holdings-table" id="retirement-table">
+        <thead>
+          <tr>
+            <th>Account / Fund</th>
+            <th>Provider</th>
+            <th class="num">Type</th>
+            <th class="num">Balance</th>
+            <th class="num">Currency</th>
+            <th class="num">Value (USD)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="retirement-body"></tbody>
+      </table>
+      <button class="add-row-btn" onclick="addRow('retirement')">+ Add account</button>
+    </div>
+
+  </main>
+
+  <footer>
+    All data is stored locally in your browser. Nothing is sent to any server.
+  </footer>
+
+  <!-- Load JS modules in dependency order -->
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

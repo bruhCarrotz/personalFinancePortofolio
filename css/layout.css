@@ -1,0 +1,121 @@
+/* ─────────────────────────────────────────
+   layout.css
+   Page skeleton: variables, body, header,
+   footer, main wrapper, section structure,
+   and responsive breakpoints.
+───────────────────────────────────────── */
+
+:root {
+  --bg:           #f7f6f2;
+  --surface:      #ffffff;
+  --surface2:     #f0ede6;
+  --border:       #e2ddd4;
+  --text:         #1a1a18;
+  --muted:        #7a766e;
+  --accent:       #2d5a3d;
+  --accent-light: #e8f2ec;
+  --accent2:      #1a3a5c;
+  --accent2-light:#e6edf5;
+  --warn:         #8a4a1a;
+  --warn-light:   #f5ece3;
+
+  --font-display: 'DM Serif Display', serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Header ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+header h1 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+header p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.last-updated {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+/* ── Main wrapper ── */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+/* ── Section wrapper ── */
+.section {
+  margin-bottom: 2.5rem;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text);
+}
+.section-total {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1.5rem;
+  }
+  main {
+    padding: 1.5rem 1rem;
+  }
+}

@@ -160,9 +160,14 @@ function buildRow(sectionKey, row, idx) {
   if (isStocks) {
     const tdGL = document.createElement('td');
     tdGL.className = 'num gl-cell';
-    const { diff, pct } = rowGainLoss(row);
-    tdGL.textContent = (diff >= 0 ? '+' : '') + fmtUSD(diff) + ' (' + pct.toFixed(1) + '%)';
-    tdGL.style.color = diff >= 0 ? 'var(--accent)' : '#c0392b';
+    const gl = rowGainLoss(row);
+    if (gl === null) {
+      tdGL.textContent = '—';
+      tdGL.style.color = 'var(--muted)';
+    } else {
+      tdGL.textContent = (gl.diff >= 0 ? '+' : '') + fmtUSD(gl.diff) + ' (' + gl.pct.toFixed(1) + '%)';
+      tdGL.style.color = gl.diff >= 0 ? 'var(--accent)' : '#c0392b';
+    }
     tr.appendChild(tdGL);
   }
 
@@ -198,9 +203,14 @@ function updateRowUSDCell(sectionKey, idx, tr) {
   if (sectionKey === 'stocks') {
     const glCell = tr.querySelector('.gl-cell');
     if (glCell) {
-      const { diff, pct } = rowGainLoss(row);
-      glCell.textContent = (diff >= 0 ? '+' : '') + fmtUSD(diff) + ' (' + pct.toFixed(1) + '%)';
-      glCell.style.color = diff >= 0 ? 'var(--accent)' : '#c0392b';
+      const gl = rowGainLoss(row);
+      if (gl === null) {
+        glCell.textContent = '—';
+        glCell.style.color = 'var(--muted)';
+      } else {
+        glCell.textContent = (gl.diff >= 0 ? '+' : '') + fmtUSD(gl.diff) + ' (' + gl.pct.toFixed(1) + '%)';
+        glCell.style.color = gl.diff >= 0 ? 'var(--accent)' : '#c0392b';
+      }
     }
     updateMarketChart(appData.stocks);
   }

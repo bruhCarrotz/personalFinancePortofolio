@@ -173,9 +173,9 @@
 }
 
 /* ── Category color fills ── */
-.c-stocks     { background: #398be0; }
-.c-emergency  { background: #1f9e75; }
-.c-retirement { background: #e9a327; }
+.c-stocks     { background: #2d5a3d; }
+.c-emergency  { background: #1a3a5c; }
+.c-retirement { background: #8a4a1a; }
 
 /* ── Responsive ── */
 @media (max-width: 700px) {
@@ -192,24 +192,35 @@
 /* ── Stocks section: table + chart side by side ── */
 .stocks-layout {
   display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
+  gap: 0;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
 }
 .stocks-table-wrap {
   flex: 1;
   min-width: 0;
 }
+/* The table inside already has border, so remove double border */
+.stocks-table-wrap .holdings-table {
+  border: none;
+  border-radius: 0;
+}
+.stocks-table-wrap .add-row-btn {
+  border-radius: 0;
+}
 .stocks-chart-wrap {
-  width: 200px;
+  width: 210px;
   flex-shrink: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border-left: 1px solid var(--border);
   padding: 1.25rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  background: var(--surface2);
 }
 .chart-title {
   font-size: 11px;
@@ -271,6 +282,8 @@
   }
   .stocks-chart-wrap {
     width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border);
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;

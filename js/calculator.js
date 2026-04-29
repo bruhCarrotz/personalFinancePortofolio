@@ -24,27 +24,41 @@
 function rowValueUSD(sectionKey, row) {
   const mode = CONFIG.SECTIONS[sectionKey].valueMode;
   if (mode === 'product') {
-    // stocks: units × current price (col5). Fall back to buy price (col4) if col5 not set yet.
     const units        = parseFloat(row.col3 || 0);
-    const currentPrice = parseFloat(row.col5 || row.col4 || 0);
+    // Use current price (col5) if set, otherwise buy price (col4) as fallback
+    const currentPrice = parseFloat(row.col5) > 0 ? parseFloat(row.col5) : parseFloat(row.col4 || 0);
     return convertToUSD(units * currentPrice, row.currency);
   }
   return convertToUSD(parseFloat(row.col4 || 0), row.currency);
 }
 
-/** Cost basis in USD for a stock row (units × buy price) */
+/** Cost basis in USD: units × avg buy price, converted at current FX */
 function rowCostUSD(row) {
   const units    = parseFloat(row.col3 || 0);
   const buyPrice = parseFloat(row.col4 || 0);
   return convertToUSD(units * buyPrice, row.currency);
 }
 
-/** Gain/loss USD and percentage for a stock row */
+/**
+ * Gain/loss for a stock row.
+ * Returns null if current price (col5) hasn't been entered yet —
+ * so G/L only shows once the user has filled in both buy and current price.
+ *
+ * Formula:
+ *   currentValue = units × currentPrice (in USD)
+ *   costBasis    = units × buyPrice     (in USD, same FX rate — apples-to-apples)
+ *   diff         = currentValue − costBasis
+ *   pct          = diff / costBasis × 100
+ */
 function rowGainLoss(row) {
-  const value = rowValueUSD('stocks', row);
-  const cost  = rowCostUSD(row);
-  const diff  = value - cost;
-  const pct   = cost > 0 ? (diff / cost * 100) : 0;
+  const hasCurrentPrice = parseFloat(row.col5) > 0;
+  const hasBuyPrice     = parseFloat(row.col4) > 0;
+  if (!hasCurrentPrice || !hasBuyPrice) return null;
+
+  const currentValue = rowValueUSD('stocks', row);
+  const costBasis    = rowCostUSD(row);
+  const diff = currentValue - costBasis;
+  const pct  = costBasis > 0 ? (diff / costBasis * 100) : 0;
   return { diff, pct };
 }
 

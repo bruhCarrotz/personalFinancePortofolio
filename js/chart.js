@@ -18,9 +18,9 @@ const MARKET_COLORS = {
     ID: '#8a4a1a',
   };
   const MARKET_LABELS = {
-    US: '🇺🇸 United States',
-    TW: '🇹🇼 Taiwan',
-    ID: '🇮🇩 Indonesia',
+    US: '🇺🇸 US',
+    TW: '🇹🇼 TW',
+    ID: '🇮🇩 ID',
   };
   
   let pieChart = null;

@@ -19,10 +19,35 @@
 /** Shared mutable state — the single source of truth in memory. */
 let appData = {};
 
-/** Called by the "+ Add holding / + Add account" buttons in index.html */
-function addRow(sectionKey) {
+// Called by the "+ Add holding / + Add account" buttons in index.html
+function addRow(sectionKey, market) {
+  if (sectionKey === 'stocks') {
+    if (!Array.isArray(appData.stocks)) appData.stocks = [];
+
+    appData.stocks.push({
+      col1: '',
+      col2: '',
+      col3: '',
+      col4: '0',
+      col5: '',               // current price, renderer expects this
+      currency: market === 'TW' ? 'TWD' : (market === 'ID' ? 'IDR' : 'USD'),
+      market: market || 'US'  // "US", "TW", or "ID"
+    });
+
+    savePortfolio(appData);
+    renderStocks(appData.stocks);
+    updateDashboard(appData);
+    updateMarketChart(appData.stocks);
+    return;
+  }
+
+  // emergency / retirement keep using renderSection
   appData[sectionKey].push({
-    col1: '', col2: '', col3: '', col4: '0', currency: 'USD',
+    col1: '',
+    col2: '',
+    col3: '',
+    col4: '0',
+    currency: 'USD',
   });
   savePortfolio(appData);
   renderSection(sectionKey, appData[sectionKey]);

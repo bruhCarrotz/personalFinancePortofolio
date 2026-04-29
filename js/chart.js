@@ -13,9 +13,9 @@
  */
 
 const MARKET_COLORS = {
-    US: '#2d5a3d',
-    TW: '#1a3a5c',
-    ID: '#8a4a1a',
+    US: '#189f77',
+    TW: '#4888c6',
+    ID: '#be8d43',
   };
   const MARKET_LABELS = {
     US: '🇺🇸 US',

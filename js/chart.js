@@ -18,9 +18,9 @@
  */
 
 const MARKET_COLORS = {
-    US: '#2fdfaa',
-    TW: '#2d70d4',
-    ID: '#e5f506',
+    US: '#fec76f',
+    TW: '#75ba75',
+    ID: '#f5945c',
 };
 const MARKET_LABELS = {
   US: '🇺🇸 US',
@@ -69,11 +69,9 @@ function makeDoughnutChart(canvasId, colors) {
 
 function initAllCharts() {
   const solidColors = [MARKET_COLORS.US, MARKET_COLORS.TW, MARKET_COLORS.ID];
-  // Cost-basis chart uses lighter/desaturated tones to signal "before"
-  const fadedColors = ['#a8f5b3', '#cde3ff', '#eef886'];
 
   chartMarket = makeDoughnutChart('market-pie', solidColors);
-  chartCost   = makeDoughnutChart('cost-pie',   fadedColors);
+  chartCost   = makeDoughnutChart('cost-pie',   solidColors);
   chartValue  = makeDoughnutChart('value-pie',  solidColors);
 }
 

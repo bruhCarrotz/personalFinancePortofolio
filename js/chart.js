@@ -1,90 +1,141 @@
 /**
  * chart.js
  *
- * Manages the "By Market" pie chart shown beside the Stocks table.
- * Uses Chart.js (loaded from CDN in index.html).
+ * Manages all three sidebar charts and the portfolio growth block.
+ *
+ * Charts:
+ *   #market-pie  — current value split by market (US/TW/ID)
+ *   #cost-pie    — cost basis split by market (what you paid)
+ *   #value-pie   — current value split by market (what it's worth now)
+ *                  (same data as market-pie but paired with cost-pie for comparison)
+ *
+ * Growth block:
+ *   Shows total cost basis, current value, $ G/L, and % G/L across all stocks.
  *
  * Exports:
- *   initMarketChart()         → creates the Chart instance on page load
- *   updateMarketChart(rows)   → re-feeds data whenever rows change
- *
- * The chart groups stock rows by their `market` field (US / TW / ID)
- * and sizes each slice by current market value in USD.
+ *   initAllCharts()     → call once on page load
+ *   updateAllCharts(rows) → call whenever stock data changes
  */
 
 const MARKET_COLORS = {
     US: '#189f77',
     TW: '#4888c6',
     ID: '#be8d43',
-  };
-  const MARKET_LABELS = {
-    US: '🇺🇸 US',
-    TW: '🇹🇼 TW',
-    ID: '🇮🇩 ID',
-  };
-  
-  let pieChart = null;
-  
-  function initMarketChart() {
-    const canvas = document.getElementById('market-pie');
-    if (!canvas) return;
-    pieChart = new Chart(canvas, {
-      type: 'doughnut',
-      data: {
-        labels: ['US', 'TW', 'ID'],
-        datasets: [{
-          data: [0, 0, 0],
-          backgroundColor: [MARKET_COLORS.US, MARKET_COLORS.TW, MARKET_COLORS.ID],
-          borderWidth: 2,
-          borderColor: '#f7f6f2',
-          hoverOffset: 6,
-        }],
-      },
-      options: {
-        cutout: '62%',
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const val = ctx.parsed;
-                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                const pct = total > 0 ? (val / total * 100).toFixed(1) : 0;
-                return ` ${fmtUSD(val)}  (${pct}%)`;
-              },
+};
+const MARKET_LABELS = {
+  US: '🇺🇸 US',
+  TW: '🇹🇼 TW',
+  ID: '🇮🇩 ID',
+};
+
+let chartMarket = null;
+let chartCost   = null;
+let chartValue  = null;
+
+/* ── Shared chart config factory ── */
+function makeDoughnutChart(canvasId, colors) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return null;
+  return new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels: ['US', 'TW', 'ID'],
+      datasets: [{
+        data: [0, 0, 0],
+        backgroundColor: colors,
+        borderWidth: 2,
+        borderColor: '#f7f6f2',
+        hoverOffset: 5,
+      }],
+    },
+    options: {
+      cutout: '65%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const val   = ctx.parsed;
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const pct   = total > 0 ? (val / total * 100).toFixed(1) : '0.0';
+              return ` ${fmtUSD(val)}  (${pct}%)`;
             },
           },
         },
       },
-    });
+    },
+  });
+}
+
+function initAllCharts() {
+  const solidColors = [MARKET_COLORS.US, MARKET_COLORS.TW, MARKET_COLORS.ID];
+  // Cost-basis chart uses lighter/desaturated tones to signal "before"
+  const fadedColors = ['#7aab8a', '#7a9ab8', '#c89a6a'];
+
+  chartMarket = makeDoughnutChart('market-pie', solidColors);
+  chartCost   = makeDoughnutChart('cost-pie',   fadedColors);
+  chartValue  = makeDoughnutChart('value-pie',  solidColors);
+}
+
+/* ── Render a legend for a chart ── */
+function renderLegend(containerId, byMarket, valueKey) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const grand = ['US','TW','ID'].reduce((s, m) => s + byMarket[m][valueKey], 0);
+  el.innerHTML = ['US','TW','ID'].map(m => {
+    const val = byMarket[m][valueKey];
+    const pct = grand > 0 ? (val / grand * 100).toFixed(1) : '0.0';
+    return `
+      <div class="chart-legend-item">
+        <span class="chart-legend-dot" style="background:${MARKET_COLORS[m]}"></span>
+        <span class="chart-legend-name">${MARKET_LABELS[m]}</span>
+        <span class="chart-legend-pct">${pct}%</span>
+        <span class="chart-legend-val">${fmtUSD(val)}</span>
+      </div>`;
+  }).join('');
+}
+
+function updateAllCharts(rows) {
+  const gains = calcPortfolioGains(rows);
+  const { byMarket, total } = gains;
+
+  // Update chart data
+  const order = ['US', 'TW', 'ID'];
+  if (chartMarket) {
+    chartMarket.data.datasets[0].data = order.map(m => byMarket[m].value);
+    chartMarket.update();
   }
-  
-  function updateMarketChart(rows) {
-    if (!pieChart) return;
-  
-    const totals = { US: 0, TW: 0, ID: 0 };
-    rows.forEach(row => {
-      const market = row.market || 'US';
-      if (totals[market] !== undefined) {
-        totals[market] += rowValueUSD('stocks', row);
-      }
-    });
-  
-    pieChart.data.datasets[0].data = [totals.US, totals.TW, totals.ID];
-    pieChart.update();
-  
-    // Update custom legend
-    const legend = document.getElementById('chart-legend');
-    if (!legend) return;
-    const grandTotal = totals.US + totals.TW + totals.ID;
-    legend.innerHTML = ['US','TW','ID'].map(m => {
-      const pct = grandTotal > 0 ? (totals[m] / grandTotal * 100).toFixed(1) : 0;
-      return `
-        <div class="chart-legend-item">
-          <span class="chart-legend-dot" style="background:${MARKET_COLORS[m]}"></span>
-          <span class="chart-legend-name">${MARKET_LABELS[m]}</span>
-          <span class="chart-legend-pct">${pct}%</span>
-          <span class="chart-legend-val">${fmtUSD(totals[m])}</span>
-        </div>`;
-    }).join('');
+  if (chartCost) {
+    chartCost.data.datasets[0].data = order.map(m => byMarket[m].cost);
+    chartCost.update();
   }
+  if (chartValue) {
+    chartValue.data.datasets[0].data = order.map(m => byMarket[m].value);
+    chartValue.update();
+  }
+
+  // Update legends
+  renderLegend('chart-legend', byMarket, 'value');
+  renderLegend('cost-legend',  byMarket, 'cost');
+  renderLegend('value-legend', byMarket, 'value');
+
+  // Update growth block
+  const diffEl = document.getElementById('growth-diff');
+  const pctEl  = document.getElementById('growth-pct');
+  document.getElementById('growth-cost').textContent  = fmtUSD(total.cost);
+  document.getElementById('growth-value').textContent = fmtUSD(total.value);
+  if (diffEl) {
+    const sign = total.diff >= 0 ? '+' : '';
+    diffEl.textContent = sign + fmtUSD(total.diff);
+    diffEl.className   = 'growth-val growth-diff ' + (total.diff >= 0 ? 'positive' : 'negative');
+  }
+  if (pctEl) {
+    const sign = total.pct >= 0 ? '+' : '';
+    pctEl.textContent = sign + total.pct.toFixed(2) + '%';
+    pctEl.className   = 'growth-val growth-pct ' + (total.pct >= 0 ? 'positive' : 'negative');
+  }
+}
+
+/* Keep old name working so renderer.js calls don't break */
+function updateMarketChart(rows) { updateAllCharts(rows); }
+function initMarketChart()       { initAllCharts(); }

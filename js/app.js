@@ -19,39 +19,20 @@
 /** Shared mutable state — the single source of truth in memory. */
 let appData = {};
 
-// Called by the "+ Add holding / + Add account" buttons in index.html
+/** Called by the "+ Add" buttons in index.html */
 function addRow(sectionKey, market) {
   if (sectionKey === 'stocks') {
-    if (!Array.isArray(appData.stocks)) appData.stocks = [];
-
-    appData.stocks.push({
-      col1: '',
-      col2: '',
-      col3: '',
-      col4: '0',
-      col5: '',
-      currency: market === 'TW' ? 'TWD' : (market === 'ID' ? 'IDR' : 'USD'),
-      market: market || 'US'
-    });
-
+    appData.stocks.push({ col1: '', col2: '', col3: '', col4: '', col5: '', currency: 'USD', market: market || 'US' });
     savePortfolio(appData);
     renderStocks(appData.stocks);
     updateDashboard(appData);
-    updateMarketChart(appData.stocks);
-    return;
+    updateAllCharts(appData.stocks);
+  } else {
+    appData[sectionKey].push({ col1: '', col2: '', col3: '', col4: '', currency: 'USD' });
+    savePortfolio(appData);
+    renderSection(sectionKey, appData[sectionKey]);
+    updateDashboard(appData);
   }
-
-  // emergency / retirement
-  appData[sectionKey].push({
-    col1: '',
-    col2: '',
-    col3: '',
-    col4: '0',
-    currency: 'USD',
-  });
-  savePortfolio(appData);
-  renderSection(sectionKey, appData[sectionKey]);
-  updateDashboard(appData);
 }
 
 /** Re-render every section's USD cells after an FX rate change */
@@ -59,14 +40,11 @@ function onFXChange() {
   const twd = parseFloat(document.getElementById('fx-twd').value);
   const idr = parseFloat(document.getElementById('fx-idr').value);
   saveFXRates(twd, idr);
-
-  // Re-render sections with new FX
-  renderStocks(appData.stocks || []);
-  renderSection('emergency', appData.emergency || []);
-  renderSection('retirement', appData.retirement || []);
-
+  renderStocks(appData.stocks);
+  renderSection('emergency',  appData.emergency);
+  renderSection('retirement', appData.retirement);
   updateDashboard(appData);
-  updateMarketChart(appData.stocks || []);
+  updateAllCharts(appData.stocks);
 }
 
 /** Initialise everything */
@@ -80,19 +58,16 @@ function init() {
   appData = loadPortfolio();
 
   // 3. Render all sections
-  // Stocks: use renderStocks for split tables
-  renderStocks(appData.stocks || []);
-
-  // Emergency / retirement: still via renderSection
-  renderSection('emergency', appData.emergency || []);
-  renderSection('retirement', appData.retirement || []);
+  renderStocks(appData.stocks);
+  renderSection('emergency',  appData.emergency);
+  renderSection('retirement', appData.retirement);
 
   // 4. Compute initial dashboard totals
   updateDashboard(appData);
 
-  // 5. Init and populate pie chart
-  initMarketChart();
-  updateMarketChart(appData.stocks || []);
+  // 5. Init and populate all charts
+  initAllCharts();
+  updateAllCharts(appData.stocks);
 
   // 6. Wire FX inputs
   document.getElementById('fx-twd').addEventListener('input', onFXChange);

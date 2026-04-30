@@ -67,6 +67,32 @@ function sectionTotalUSD(sectionKey, rows) {
   return rows.reduce((sum, row) => sum + rowValueUSD(sectionKey, row), 0);
 }
 
+/**
+ * Aggregates cost basis and current value across all stock rows, grouped by market.
+ * Only rows with both buy price and current price are included in gain calculations.
+ * Returns:
+ *   { byMarket: { US: {cost, value}, TW: {cost, value}, ID: {cost, value} },
+ *     total: { cost, value, diff, pct } }
+ */
+function calcPortfolioGains(rows) {
+  const byMarket = {
+    US: { cost: 0, value: 0 },
+    TW: { cost: 0, value: 0 },
+    ID: { cost: 0, value: 0 },
+  };
+  rows.forEach(row => {
+    const m = row.market || 'US';
+    if (!byMarket[m]) return;
+    byMarket[m].value += rowValueUSD('stocks', row);
+    byMarket[m].cost  += rowCostUSD(row);
+  });
+  const totalCost  = byMarket.US.cost  + byMarket.TW.cost  + byMarket.ID.cost;
+  const totalValue = byMarket.US.value + byMarket.TW.value + byMarket.ID.value;
+  const diff = totalValue - totalCost;
+  const pct  = totalCost > 0 ? ((totalValue - totalCost) / totalCost) * 100 : 0;
+  return { byMarket, total: { cost: totalCost, value: totalValue, diff, pct } };
+}
+
 function calcNetWorth(totals) {
   return Object.values(totals).reduce((a, b) => a + b, 0);
 }

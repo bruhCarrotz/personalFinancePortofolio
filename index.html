@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Finance Portofolio</title>
+  <title>My Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/layout.css">
@@ -14,21 +14,62 @@
 
   <header>
     <div>
-      <h1>Personal Finance Portofolio</h1>
-      <p>Personal Investment Tracker — Net Worth Overview</p>
+      <h1>Personal Investment Tracker</h1>
+      <p>Net Worth Overview</p>
     </div>
     <span class="last-updated" id="last-updated"></span>
   </header>
 
   <div class="page-body">
 
-    <!-- ── LEFT SIDEBAR: Pie chart ── -->
+    <!-- ── LEFT SIDEBAR: Charts ── -->
     <aside class="sidebar">
+
+      <div class="sidebar-section-label">By Market</div>
       <div class="sidebar-chart-card">
-        <div class="sidebar-chart-title">Visual By Market</div>
         <canvas id="market-pie"></canvas>
         <div id="chart-legend" class="chart-legend"></div>
       </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">Cost Basis</div>
+      <div class="sidebar-chart-card">
+        <canvas id="cost-pie"></canvas>
+        <div id="cost-legend" class="chart-legend"></div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">Current Value</div>
+      <div class="sidebar-chart-card">
+        <canvas id="value-pie"></canvas>
+        <div id="value-legend" class="chart-legend"></div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">Portfolio Growth</div>
+      <div class="growth-block" id="growth-block">
+        <div class="growth-row">
+          <span class="growth-label">Cost Basis</span>
+          <span class="growth-val" id="growth-cost">$0</span>
+        </div>
+        <div class="growth-row">
+          <span class="growth-label">Current Value</span>
+          <span class="growth-val" id="growth-value">$0</span>
+        </div>
+        <div class="growth-divider"></div>
+        <div class="growth-row">
+          <span class="growth-label">Gain / Loss $</span>
+          <span class="growth-val growth-diff" id="growth-diff">$0</span>
+        </div>
+        <div class="growth-row">
+          <span class="growth-label">Gain / Loss %</span>
+          <span class="growth-val growth-pct" id="growth-pct">0.00%</span>
+        </div>
+      </div>
+
     </aside>
 
     <!-- ── RIGHT COLUMN: all content blocks ── -->
@@ -49,7 +90,7 @@
             <label>IDR</label>
           </div>
         </div>
-        <span class="fx-note">All totals are to be converted to USD</span>
+        <span class="fx-note">All totals converted to USD</span>
       </div>
 
       <!-- Net Worth -->
@@ -105,7 +146,7 @@
             <th class="num">Current Price</th>
             <th class="num">Currency</th>
             <th class="num">Value (USD)</th>
-            <th class="num">G/L (USD)</th>
+            <th class="num">G/L</th>
             <th></th>
           </tr></thead>
           <tbody id="stocks-us-body"></tbody>
@@ -128,7 +169,7 @@
             <th class="num">Current Price</th>
             <th class="num">Currency</th>
             <th class="num">Value (USD)</th>
-            <th class="num">G/L (USD)</th>
+            <th class="num">G/L</th>
             <th></th>
           </tr></thead>
           <tbody id="stocks-tw-body"></tbody>
@@ -151,7 +192,7 @@
             <th class="num">Current Price</th>
             <th class="num">Currency</th>
             <th class="num">Value (USD)</th>
-            <th class="num">G/L (USD)</th>
+            <th class="num">G/L</th>
             <th></th>
           </tr></thead>
           <tbody id="stocks-id-body"></tbody>
@@ -162,7 +203,7 @@
       <!-- Emergency Fund -->
       <div class="section">
         <div class="section-header">
-          <span class="section-title">🆘 Emergency Fund</span>
+          <span class="section-title">Emergency Fund</span>
           <span class="section-total" id="emergency-total">USD $0</span>
         </div>
         <table class="holdings-table">
@@ -175,13 +216,13 @@
           </tr></thead>
           <tbody id="emergency-body"></tbody>
         </table>
-        <button class="add-row-btn" onclick="addRow('emergency')">+ Add Amount</button>
+        <button class="add-row-btn" onclick="addRow('emergency')">+ Add account</button>
       </div>
 
       <!-- Retirement -->
       <div class="section">
         <div class="section-header">
-          <span class="section-title">🌴 Retirement</span>
+          <span class="section-title">Retirement</span>
           <span class="section-total" id="retirement-total">USD $0</span>
         </div>
         <table class="holdings-table">
@@ -195,7 +236,7 @@
           </tr></thead>
           <tbody id="retirement-body"></tbody>
         </table>
-        <button class="add-row-btn" onclick="addRow('retirement')">+ Add Amount</button>
+        <button class="add-row-btn" onclick="addRow('retirement')">+ Add account</button>
       </div>
 
     </main>

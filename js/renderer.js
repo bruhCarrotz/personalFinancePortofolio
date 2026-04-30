@@ -165,16 +165,49 @@ function buildStockRow(row, globalIdx) {
   return tr;
 }
 
+/* ── Sort rows by date (col1 for emergency/retirement, col2 for stocks) ascending ── */
+function sortByDate(rows, dateField) {
+  return [...rows].sort((a, b) => {
+    const da = a[dateField] || '';
+    const db = b[dateField] || '';
+    if (!da && !db) return 0;
+    if (!da) return 1;   // blank dates sink to bottom
+    if (!db) return -1;
+    return da < db ? -1 : da > db ? 1 : 0;
+  });
+}
+
 /* ── Render all three per-market stock tables ── */
 function renderStocks(rows) {
-  const bodies = { US: document.getElementById('stocks-us-body'), TW: document.getElementById('stocks-tw-body'), ID: document.getElementById('stocks-id-body') };
+  const bodies = {
+    US: document.getElementById('stocks-us-body'),
+    TW: document.getElementById('stocks-tw-body'),
+    ID: document.getElementById('stocks-id-body'),
+  };
   bodies.US.innerHTML = '';
   bodies.TW.innerHTML = '';
   bodies.ID.innerHTML = '';
+
+  // Build per-market arrays preserving original globalIdx for mutations
+  const byMarket = { US: [], TW: [], ID: [] };
   rows.forEach((row, globalIdx) => {
-    const market = row.market || 'US';
-    const tbody  = bodies[market] || bodies.US;
-    tbody.appendChild(buildStockRow(row, globalIdx));
+    const m = row.market || 'US';
+    if (byMarket[m]) byMarket[m].push({ row, globalIdx });
+  });
+
+  // Sort each market's rows chronologically by date (col2)
+  ['US','TW','ID'].forEach(m => {
+    byMarket[m]
+      .sort((a, b) => {
+        const da = a.row.col2 || '', db = b.row.col2 || '';
+        if (!da && !db) return 0;
+        if (!da) return 1;
+        if (!db) return -1;
+        return da < db ? -1 : da > db ? 1 : 0;
+      })
+      .forEach(({ row, globalIdx }) => {
+        bodies[m].appendChild(buildStockRow(row, globalIdx));
+      });
   });
 }
 
@@ -266,7 +299,13 @@ function buildRow(sectionKey, row, idx) {
 function renderSection(sectionKey, rows) {
   const tbody = document.getElementById(sectionKey + '-body');
   tbody.innerHTML = '';
-  rows.forEach((row, idx) => tbody.appendChild(buildRow(sectionKey, row, idx)));
+  // Sort by date (col1) chronologically; blank dates go last
+  const sorted = sortByDate(rows, 'col1');
+  // Build using original index from appData so mutations stay correct
+  sorted.forEach(sortedRow => {
+    const originalIdx = rows.indexOf(sortedRow);
+    tbody.appendChild(buildRow(sectionKey, sortedRow, originalIdx));
+  });
 }
 
 /* ── Refresh all dashboard numbers ── */

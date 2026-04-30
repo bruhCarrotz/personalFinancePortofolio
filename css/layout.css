@@ -83,28 +83,67 @@ header p {
   overflow-y: auto;
   border-right: 1px solid var(--border);
   background: var(--surface);
-  padding: 1.75rem 1.25rem;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar-section-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.25rem 0;
 }
 
 .sidebar-chart-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.75rem;
 }
 
-.sidebar-chart-title {
+#market-pie, #cost-pie, #value-pie {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+/* ── Growth block ── */
+.growth-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.growth-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
+}
+.growth-label {
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
   color: var(--muted);
-  font-weight: 500;
-  align-self: flex-start;
 }
-
-#market-pie {
-  width: 170px !important;
-  height: 170px !important;
+.growth-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+.growth-val.positive { color: var(--accent); }
+.growth-val.negative { color: #c0392b; }
+.growth-divider {
+  border-top: 1px dashed var(--border);
+  margin: 4px 0;
 }
 
 .chart-legend {
@@ -207,15 +246,14 @@ footer {
     border-right: none;
     border-bottom: 1px solid var(--border);
     padding: 1.25rem;
-  }
-  .sidebar-chart-card {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    gap: 1.5rem;
   }
-  #market-pie {
-    width: 130px !important;
-    height: 130px !important;
+  .sidebar-divider { display: none; }
+  #market-pie, #cost-pie, #value-pie {
+    width: 110px !important;
+    height: 110px !important;
   }
   .content {
     padding: 1.25rem 1rem;

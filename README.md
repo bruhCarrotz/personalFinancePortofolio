@@ -5,7 +5,12 @@ A personal net worth dashboard for tracking investments, emergency fund, retirem
 Further improvement such as dynamic stock and currencies pricing, simple database structure, etc. is in consideration and in progress.
 
 ## Documentation & Fixes
-**2026/04/29** : Initial Commit
+**2026/04/30** : Functional and Visual Improvements
+* Developed modernized sidebar with a new multi-section layout that now tracks Cost Basis, Current Value, and Portfolio Growth alongside market distribution.
+* Developed a standardized visualizations using a shared factory, enabling synchronized updates across all charts and metrics with a single call.
+* Fixed gain/loss calculations to provide both per-market breakdowns and portfolio-wide performance summaries in dollars and percentages.
+* Implemented automatic display-level sorting for all holdings, ensuring data is always organized chronologically by date while keeping the underlying data structure intact.
+**2026/04/29** : Initial Commits
 * Developed core structure, theme and design of the webpage.
 * Added support for tracking stocks across multiple markets (US, Taiwan, Indonesia) in a single, consistent data model.
 * Updated the interface so holdings are clearly grouped by market while sharing the same underlying logic and storage.

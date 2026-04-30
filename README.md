@@ -10,6 +10,7 @@ Further improvement such as dynamic stock and currencies pricing, simple databas
 * Developed a standardized visualizations using a shared factory, enabling synchronized updates across all charts and metrics with a single call.
 * Fixed gain/loss calculations to provide both per-market breakdowns and portfolio-wide performance summaries in dollars and percentages.
 * Implemented automatic display-level sorting for all holdings, ensuring data is always organized chronologically by date while keeping the underlying data structure intact.
+
 **2026/04/29** : Initial Commits
 * Developed core structure, theme and design of the webpage.
 * Added support for tracking stocks across multiple markets (US, Taiwan, Indonesia) in a single, consistent data model.

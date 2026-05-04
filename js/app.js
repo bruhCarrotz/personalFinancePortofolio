@@ -19,10 +19,13 @@
 /** Shared mutable state — the single source of truth in memory. */
 let appData = {};
 
+const MARKET_DEFAULT_CURRENCY = { US: 'USD', TW: 'TWD', ID: 'IDR' };
+
 /** Called by the "+ Add" buttons in index.html */
 function addRow(sectionKey, market) {
   if (sectionKey === 'stocks') {
-    appData.stocks.push({ col1: '', col2: '', col3: '', col4: '', col5: '', currency: 'USD', market: market || 'US' });
+    const currency = MARKET_DEFAULT_CURRENCY[market] || 'USD';
+    appData.stocks.push({ col1: '', col2: '', col3: '', col4: '', col5: '', currency, market: market || 'US' });
     savePortfolio(appData);
     renderStocks(appData.stocks);
     updateDashboard(appData);
@@ -48,14 +51,14 @@ function onFXChange() {
 }
 
 /** Initialise everything */
-function init() {
+async function init() {
   // 1. Load and apply saved FX rates
   const savedFX = loadFXRates();
   document.getElementById('fx-twd').value = savedFX.TWD;
   document.getElementById('fx-idr').value = savedFX.IDR;
 
-  // 2. Load portfolio data
-  appData = loadPortfolio();
+  // 2. Load portfolio — tries portfolio-data.json first, falls back to localStorage
+  appData = await loadPortfolioFromServer();
 
   // 3. Render all sections
   renderStocks(appData.stocks);
@@ -73,7 +76,10 @@ function init() {
   document.getElementById('fx-twd').addEventListener('input', onFXChange);
   document.getElementById('fx-idr').addEventListener('input', onFXChange);
 
-  // 7. Timestamp
+  // 7. Wire import file input
+  document.getElementById('import-file-input').addEventListener('change', () => importJSON());
+
+  // 8. Timestamp
   document.getElementById('last-updated').textContent =
     'Updated ' + new Date().toLocaleDateString('en-US', {
       year: 'numeric', month: 'short', day: 'numeric',

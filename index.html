@@ -18,7 +18,17 @@
       <h1>Personal Investment Tracker</h1>
       <p>Net Worth Overview</p>
     </div>
-    <span class="last-updated" id="last-updated"></span>
+    <div class="header-actions">
+      <span class="last-updated" id="last-updated"></span>
+      <div class="header-buttons">
+        <label class="btn-import" title="Import portfolio from JSON file">
+          ↑ Import JSON
+          <input type="file" id="import-file-input" accept=".json" style="display:none">
+        </label>
+        <button class="btn-export" onclick="exportJSON()" title="Export portfolio to JSON">↓ Export JSON</button>
+        <button class="btn-export btn-excel" onclick="exportExcel()" title="Export portfolio to Excel">↓ Excel</button>
+      </div>
+    </div>
   </header>
 
   <div class="page-body">
@@ -248,6 +258,7 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/fx.js"></script>

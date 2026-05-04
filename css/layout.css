@@ -43,10 +43,10 @@ body {
 header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 2rem 3rem;
+  padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 header h1 {
   font-family: var(--font-display);
@@ -60,10 +60,53 @@ header p {
   color: var(--muted);
   margin-top: 2px;
 }
+.header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
 .last-updated {
   font-size: 12px;
   color: var(--muted);
   font-family: var(--font-mono);
+}
+.header-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn-export,
+.btn-import {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.btn-export:hover,
+.btn-import:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.btn-excel {
+  background: var(--surface2);
+}
+.btn-excel:hover {
+  background: #eaf4ee;
+  color: #1a7a3a;
+  border-color: #1a7a3a;
 }
 
 /* ── Two-column page body ── */

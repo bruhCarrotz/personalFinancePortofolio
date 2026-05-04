@@ -5,6 +5,12 @@ A personal net worth dashboard for tracking investments, emergency fund, retirem
 Further improvement such as dynamic stock and currencies pricing, simple database structure, etc. is in consideration and in progress.
 
 ## Documentation & Fixes
+**2026/05/04** : Local Storage & File‑Based Portfolio Sync
+* Developed an async routine that fetches ./portfolio-data.json using cache: 'no-store'.
+* Developed a helper that serializes appData into a pretty‑printed JSON blob and initiates a download as portfolio-data.json.
+* Developed a file‑import routine that reads a user‑selected .json file, validates the presence of a stocks array, writes the payload to localStorage, and re‑renders all portfolio views in place without a page reload.
+* Developed a SheetJS‑based exporter that assembles a multi‑sheet workbook with “Stocks”, “Emergency Fund”, “Retirement”, and a unified “Summary” sheet that computes cost basis, current value, and gain/loss metrics.
+
 **2026/04/30** : Functional and Visual Improvements
 * Developed modernized sidebar with a new multi-section layout that now tracks Cost Basis, Current Value, and Portfolio Growth alongside market distribution.
 * Developed a standardized visualizations using a shared factory, enabling synchronized updates across all charts and metrics with a single call.

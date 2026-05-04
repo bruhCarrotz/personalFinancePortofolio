@@ -83,31 +83,30 @@ function makeDoughnutChart(canvasId, labels, data, colors) {
 /* ── Update an existing chart's data in-place ── */
 function refreshChart(chart, labels, data, colors) {
   if (!chart) return;
-  chart.data.labels                        = labels;
-  chart.data.datasets[0].data             = data;
-  chart.data.datasets[0].backgroundColor  = colors;
+  // Splice-replace to ensure Chart.js doesn't accumulate stale entries
+  chart.data.labels.splice(0, chart.data.labels.length, ...labels);
+  chart.data.datasets[0].data.splice(0, chart.data.datasets[0].data.length, ...data);
+  chart.data.datasets[0].backgroundColor.splice(0, chart.data.datasets[0].backgroundColor.length, ...colors);
   chart.update();
 }
 
-/* ── Render a legend ── */
-function renderHoldingsLegend(containerId, rows, colors) {
+/* ── Render a holdings legend from grouped ticker data ── */
+function renderHoldingsLegend(containerId, grouped, colors) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  const total = rows.reduce((s, r) => s + rowValueUSD('stocks', r), 0);
-  if (rows.length === 0) {
+  if (grouped.length === 0) {
     el.innerHTML = '<div style="font-size:11px;color:var(--muted)">No holdings yet</div>';
     return;
   }
-  el.innerHTML = rows.map((r, i) => {
-    const val = rowValueUSD('stocks', r);
-    const pct = total > 0 ? (val / total * 100).toFixed(1) : '0.0';
-    const label = r.col1 || '—';
+  const total = grouped.reduce((s, g) => s + g.value, 0);
+  el.innerHTML = grouped.map((g, i) => {
+    const pct = total > 0 ? (g.value / total * 100).toFixed(1) : '0.0';
     return `
       <div class="chart-legend-item">
-        <span class="chart-legend-dot" style="background:${colors[i % colors.length]}"></span>
-        <span class="chart-legend-name">${label}</span>
+        <span class="chart-legend-dot" style="background:${colors[i]}"></span>
+        <span class="chart-legend-name">${g.ticker}</span>
         <span class="chart-legend-pct">${pct}%</span>
-        <span class="chart-legend-val">${fmtUSD(val)}</span>
+        <span class="chart-legend-val">${fmtUSD(g.value)}</span>
       </div>`;
   }).join('');
 }
@@ -140,6 +139,21 @@ function initAllCharts() {
   chartID = makeDoughnutChart('id-holdings-pie', [], [], []);
 }
 
+/* ── Aggregate rows by ticker (col1), summing USD values ── */
+function groupByTicker(rows) {
+  const map = new Map();
+  rows.forEach(row => {
+    const ticker = (row.col1 || '—').trim() || '—';
+    const val    = rowValueUSD('stocks', row);
+    if (map.has(ticker)) {
+      map.get(ticker).value += val;
+    } else {
+      map.set(ticker, { ticker, value: val });
+    }
+  });
+  return Array.from(map.values()); // [{ ticker, value }, ...]
+}
+
 /* ── Update all charts + growth block ── */
 function updateAllCharts(rows) {
   const gains = calcPortfolioGains(rows);
@@ -153,34 +167,26 @@ function updateAllCharts(rows) {
   );
   renderMarketLegend(byMarket);
 
-  /* Per-market holdings charts */
+  /* Per-market holdings charts — grouped by ticker */
   const usRows = rows.filter(r => (r.market || 'US') === 'US');
   const twRows = rows.filter(r => r.market === 'TW');
   const idRows = rows.filter(r => r.market === 'ID');
 
-  const usColors = usRows.map((_, i) => holdingColor(i));
-  const twColors = twRows.map((_, i) => holdingColor(i));
-  const idColors = idRows.map((_, i) => holdingColor(i));
+  const usGrouped = groupByTicker(usRows);
+  const twGrouped = groupByTicker(twRows);
+  const idGrouped = groupByTicker(idRows);
 
-  refreshChart(chartUS,
-    usRows.map(r => r.col1 || '—'),
-    usRows.map(r => rowValueUSD('stocks', r)),
-    usColors
-  );
-  refreshChart(chartTW,
-    twRows.map(r => r.col1 || '—'),
-    twRows.map(r => rowValueUSD('stocks', r)),
-    twColors
-  );
-  refreshChart(chartID,
-    idRows.map(r => r.col1 || '—'),
-    idRows.map(r => rowValueUSD('stocks', r)),
-    idColors
-  );
+  const usColors = usGrouped.map((_, i) => holdingColor(i));
+  const twColors = twGrouped.map((_, i) => holdingColor(i));
+  const idColors = idGrouped.map((_, i) => holdingColor(i));
 
-  renderHoldingsLegend('us-holdings-legend', usRows, usColors);
-  renderHoldingsLegend('tw-holdings-legend', twRows, twColors);
-  renderHoldingsLegend('id-holdings-legend', idRows, idColors);
+  refreshChart(chartUS, usGrouped.map(g => g.ticker), usGrouped.map(g => g.value), usColors);
+  refreshChart(chartTW, twGrouped.map(g => g.ticker), twGrouped.map(g => g.value), twColors);
+  refreshChart(chartID, idGrouped.map(g => g.ticker), idGrouped.map(g => g.value), idColors);
+
+  renderHoldingsLegend('us-holdings-legend', usGrouped, usColors);
+  renderHoldingsLegend('tw-holdings-legend', twGrouped, twColors);
+  renderHoldingsLegend('id-holdings-legend', idGrouped, idColors);
 
   /* Growth block */
   const diffEl = document.getElementById('growth-diff');

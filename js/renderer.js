@@ -299,13 +299,20 @@ function buildRow(sectionKey, row, idx) {
 function renderSection(sectionKey, rows) {
   const tbody = document.getElementById(sectionKey + '-body');
   tbody.innerHTML = '';
-  // Sort by date (col1) chronologically; blank dates go last
-  const sorted = sortByDate(rows, 'col1');
-  // Build using original index from appData so mutations stay correct
-  sorted.forEach(sortedRow => {
-    const originalIdx = rows.indexOf(sortedRow);
-    tbody.appendChild(buildRow(sectionKey, sortedRow, originalIdx));
-  });
+  // Tag each row with its original index before sorting, so mutations stay correct
+  // even when two rows have identical field values (indexOf would return wrong match)
+  rows
+    .map((row, originalIdx) => ({ row, originalIdx }))
+    .sort((a, b) => {
+      const da = a.row.col1 || '', db = b.row.col1 || '';
+      if (!da && !db) return 0;
+      if (!da) return 1;
+      if (!db) return -1;
+      return da < db ? -1 : da > db ? 1 : 0;
+    })
+    .forEach(({ row, originalIdx }) => {
+      tbody.appendChild(buildRow(sectionKey, row, originalIdx));
+    });
 }
 
 /* ── Refresh all dashboard numbers ── */

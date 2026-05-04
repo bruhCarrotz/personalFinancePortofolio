@@ -20,8 +20,8 @@
 /* ── Market colours (used by the By Market chart) ── */
 const MARKET_COLORS = {
   US: '#ec6b56',
-  TW: '#ffc154',
-  ID: '#47b39c',
+  TW: '#47b39c',
+  ID: '#ffc154',
 };
 const MARKET_LABELS = {
   US: '🇺🇸 US',

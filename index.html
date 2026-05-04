@@ -44,18 +44,26 @@
 
       <div class="sidebar-divider"></div>
 
-      <div class="sidebar-section-label">Cost Basis</div>
+      <div class="sidebar-section-label">🇺🇸 US Holdings</div>
       <div class="sidebar-chart-card">
-        <canvas id="cost-pie"></canvas>
-        <div id="cost-legend" class="chart-legend"></div>
+        <canvas id="us-holdings-pie"></canvas>
+        <div id="us-holdings-legend" class="chart-legend"></div>
       </div>
 
       <div class="sidebar-divider"></div>
 
-      <div class="sidebar-section-label">Current Value</div>
+      <div class="sidebar-section-label">🇹🇼 TW Holdings</div>
       <div class="sidebar-chart-card">
-        <canvas id="value-pie"></canvas>
-        <div id="value-legend" class="chart-legend"></div>
+        <canvas id="tw-holdings-pie"></canvas>
+        <div id="tw-holdings-legend" class="chart-legend"></div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">🇮🇩 ID Holdings</div>
+      <div class="sidebar-chart-card">
+        <canvas id="id-holdings-pie"></canvas>
+        <div id="id-holdings-legend" class="chart-legend"></div>
       </div>
 
       <div class="sidebar-divider"></div>
@@ -101,7 +109,7 @@
             <label>IDR</label>
           </div>
         </div>
-        <span class="fx-note">All totals are to be converted to USD</span>
+        <span class="fx-note">All totals converted to USD</span>
       </div>
 
       <!-- Net Worth -->
@@ -214,7 +222,7 @@
       <!-- Emergency Fund -->
       <div class="section">
         <div class="section-header">
-          <span class="section-title">🆘 Emergency Fund</span>
+          <span class="section-title">Emergency Fund</span>
           <span class="section-total" id="emergency-total">USD $0</span>
         </div>
         <table class="holdings-table">
@@ -233,7 +241,7 @@
       <!-- Retirement -->
       <div class="section">
         <div class="section-header">
-          <span class="section-title">🌴 Retirement</span>
+          <span class="section-title">Retirement</span>
           <span class="section-total" id="retirement-total">USD $0</span>
         </div>
         <table class="holdings-table">

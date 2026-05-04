@@ -10,6 +10,7 @@ Further improvement such as dynamic stock and currencies pricing, simple databas
 * Developed a helper that serializes `appData` into a pretty‑printed JSON blob and initiates a download as `portfolio-data.json`.
 * Developed a file‑import routine that reads a user‑selected `.json` file, validates the presence of a stocks array, writes the payload to `localStorage`, and re‑renders all portfolio views in place without a page reload.
 * Developed a SheetJS‑based exporter that assembles a multi‑sheet workbook with “Stocks”, “Emergency Fund”, “Retirement”, and a unified “Summary” sheet that computes cost basis, current value, and gain/loss metrics.
+* Removed `Cost-Basis` and `Current Value` pie chart, replacing them with per-market holding pie charts.
 
 **2026/04/30** : Functional and Visual Improvements
 * Developed modernized sidebar with a new multi-section layout that now tracks Cost Basis, Current Value, and Portfolio Growth alongside market distribution.

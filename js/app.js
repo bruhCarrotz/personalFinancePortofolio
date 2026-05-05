@@ -52,7 +52,7 @@ function onFXChange() {
 
 /** Initialise everything */
 async function init() {
-  // 1. Load and apply saved FX rates
+  // 1. Load and apply saved FX rates first (instant, no network wait)
   const savedFX = loadFXRates();
   document.getElementById('fx-twd').value = savedFX.TWD;
   document.getElementById('fx-idr').value = savedFX.IDR;
@@ -84,6 +84,9 @@ async function init() {
     'Updated ' + new Date().toLocaleDateString('en-US', {
       year: 'numeric', month: 'short', day: 'numeric',
     });
+
+  // 9. Fetch live FX rates in the background (non-blocking)
+  refreshFXRates();
 }
 
 document.addEventListener('DOMContentLoaded', init);

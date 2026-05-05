@@ -73,7 +73,7 @@ function toSymbol(row) {
 /* ── Finnhub: US stocks ── */
 async function fetchFinnhub(symbol) {
   const key = (FINNHUB_API_KEY || '').trim();
-  if (!key || key === 'YOUR_FINNHUB_KEY_HERE') {
+  if (!key) {
     throw new Error('Finnhub API key not set — edit FINNHUB_API_KEY in prices.js');
   }
   const url = `${FINNHUB_BASE}?symbol=${encodeURIComponent(symbol)}&token=${key}`;

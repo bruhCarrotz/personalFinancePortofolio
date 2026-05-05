@@ -38,6 +38,29 @@
     <!-- ── LEFT SIDEBAR: Charts ── -->
     <aside class="sidebar">
 
+      <div class="sidebar-section-label">Portfolio Growth</div>
+      <div class="growth-block" id="growth-block">
+        <div class="growth-row">
+          <span class="growth-label">Cost Basis</span>
+          <span class="growth-val" id="growth-cost">$0</span>
+        </div>
+        <div class="growth-row">
+          <span class="growth-label">Current Value</span>
+          <span class="growth-val" id="growth-value">$0</span>
+        </div>
+        <div class="growth-divider"></div>
+        <div class="growth-row">
+          <span class="growth-label">Gain / Loss $</span>
+          <span class="growth-val growth-diff" id="growth-diff">$0</span>
+        </div>
+        <div class="growth-row">
+          <span class="growth-label">Gain / Loss %</span>
+          <span class="growth-val growth-pct" id="growth-pct">0.00%</span>
+        </div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
       <div class="sidebar-section-label">By Market</div>
       <div class="sidebar-chart-card">
         <canvas id="market-pie"></canvas>
@@ -66,29 +89,6 @@
       <div class="sidebar-chart-card">
         <canvas id="id-holdings-pie"></canvas>
         <div id="id-holdings-legend" class="chart-legend"></div>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section-label">Portfolio Growth</div>
-      <div class="growth-block" id="growth-block">
-        <div class="growth-row">
-          <span class="growth-label">Cost Basis</span>
-          <span class="growth-val" id="growth-cost">$0</span>
-        </div>
-        <div class="growth-row">
-          <span class="growth-label">Current Value</span>
-          <span class="growth-val" id="growth-value">$0</span>
-        </div>
-        <div class="growth-divider"></div>
-        <div class="growth-row">
-          <span class="growth-label">Gain / Loss $</span>
-          <span class="growth-val growth-diff" id="growth-diff">$0</span>
-        </div>
-        <div class="growth-row">
-          <span class="growth-label">Gain / Loss %</span>
-          <span class="growth-val growth-pct" id="growth-pct">0.00%</span>
-        </div>
       </div>
 
     </aside>
@@ -266,8 +266,7 @@
 
     </main>
   </div>
-
-  <!-- ── Price Debug Panel (hidden until Refresh Prices is clicked) ── -->
+<!--
   <div id="price-debug-panel" style="display:none;margin:0 2rem 1.5rem;background:#1a1a18;color:#a8d8a8;border-radius:8px;padding:1rem 1.25rem;font-family:monospace;font-size:12px;line-height:1.7;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
       <span style="color:#ffc154;font-weight:bold;">🔍 Price Fetch Debug Log</span>
@@ -276,7 +275,7 @@
     </div>
     <pre id="price-debug-log" style="white-space:pre-wrap;margin:0;"></pre>
   </div>
-
+-->
   <footer>
     All data is stored locally in your browser. Nothing is sent to any server.
   </footer>

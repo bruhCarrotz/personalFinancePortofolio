@@ -108,6 +108,35 @@ header p {
   color: #1a7a3a;
   border-color: #1a7a3a;
 }
+.btn-prices {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.btn-prices:hover {
+  background: var(--accent);
+  color: white;
+}
+.btn-prices:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.price-status {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  text-align: right;
+  min-height: 16px;
+  display: block;
+}
 
 /* ── Two-column page body ── */
 .page-body {

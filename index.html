@@ -27,7 +27,9 @@
         </label>
         <button class="btn-export" onclick="exportJSON()" title="Export portfolio to JSON">↓ Export JSON</button>
         <button class="btn-export btn-excel" onclick="exportExcel()" title="Export portfolio to Excel">↓ Excel</button>
+        <button class="btn-prices" id="btn-refresh-prices" onclick="refreshPrices()" title="Fetch live prices from Yahoo Finance">⟳ Refresh Prices</button>
       </div>
+      <span id="price-refresh-status" class="price-status"></span>
     </div>
   </header>
 
@@ -36,29 +38,6 @@
     <!-- ── LEFT SIDEBAR: Charts ── -->
     <aside class="sidebar">
 
-      <div class="sidebar-section-label">Portfolio Growth</div>
-      <div class="growth-block" id="growth-block">
-        <div class="growth-row">
-          <span class="growth-label">Cost Basis</span>
-          <span class="growth-val" id="growth-cost">$0</span>
-        </div>
-        <div class="growth-row">
-          <span class="growth-label">Current Value</span>
-          <span class="growth-val" id="growth-value">$0</span>
-        </div>
-        <div class="growth-divider"></div>
-        <div class="growth-row">
-          <span class="growth-label">Gain / Loss $</span>
-          <span class="growth-val growth-diff" id="growth-diff">$0</span>
-        </div>
-        <div class="growth-row">
-          <span class="growth-label">Gain / Loss %</span>
-          <span class="growth-val growth-pct" id="growth-pct">0.00%</span>
-        </div>
-      </div>
-
-      <div class="sidebar-divider"></div>
-      
       <div class="sidebar-section-label">By Market</div>
       <div class="sidebar-chart-card">
         <canvas id="market-pie"></canvas>
@@ -87,6 +66,29 @@
       <div class="sidebar-chart-card">
         <canvas id="id-holdings-pie"></canvas>
         <div id="id-holdings-legend" class="chart-legend"></div>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-section-label">Portfolio Growth</div>
+      <div class="growth-block" id="growth-block">
+        <div class="growth-row">
+          <span class="growth-label">Cost Basis</span>
+          <span class="growth-val" id="growth-cost">$0</span>
+        </div>
+        <div class="growth-row">
+          <span class="growth-label">Current Value</span>
+          <span class="growth-val" id="growth-value">$0</span>
+        </div>
+        <div class="growth-divider"></div>
+        <div class="growth-row">
+          <span class="growth-label">Gain / Loss $</span>
+          <span class="growth-val growth-diff" id="growth-diff">$0</span>
+        </div>
+        <div class="growth-row">
+          <span class="growth-label">Gain / Loss %</span>
+          <span class="growth-val growth-pct" id="growth-pct">0.00%</span>
+        </div>
       </div>
 
     </aside>
@@ -273,6 +275,7 @@
   <script src="js/calculator.js"></script>
   <script src="js/renderer.js"></script>
   <script src="js/chart.js"></script>
+  <script src="js/prices.js"></script>
   <script src="js/app.js"></script>
 
 </body>

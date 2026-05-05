@@ -15,7 +15,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-const FINNHUB_API_KEY = 'd7sql2pr01qorsvjm3h0d7sql2pr01qorsvjm3hg'; // ← paste your key from finnhub.io
+const FINNHUB_API_KEY = 'd7sqpkpr01qorsvjmh9gd7sqpkpr01qorsvjmha0'; // ← paste your key from finnhub.io
 
 /* ── Endpoints ── */
 const FINNHUB_BASE  = 'https://finnhub.io/api/v1/quote';
@@ -34,7 +34,7 @@ function toYahooSymbol(row) {
 
 /* ── Finnhub: fetch one US symbol ── */
 async function fetchFinnhub(symbol) {
-  if (!FINNHUB_API_KEY || FINNHUB_API_KEY === 'd7sql2pr01qorsvjm3h0d7sql2pr01qorsvjm3hg') {
+  if (!FINNHUB_API_KEY || FINNHUB_API_KEY === 'd7sqpkpr01qorsvjmh9gd7sqpkpr01qorsvjmha0') {
     throw new Error('Finnhub API key not set — edit FINNHUB_API_KEY in prices.js');
   }
   const url = `${FINNHUB_BASE}?symbol=${encodeURIComponent(symbol)}&token=${FINNHUB_API_KEY}`;

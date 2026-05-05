@@ -1,21 +1,19 @@
 /**
  * fx.js
  *
- * Handles currency conversion.
- * All monetary values in the app are converted to USD for display
- * and for the net worth total.
+ * Handles currency conversion and live rate fetching.
  *
- * Manual mode:  user types rates directly into the FX bar inputs.
- * Live mode:    refreshFXRates() fetches from Frankfurter API and
- *               populates the inputs automatically.
+ * Live rates source: @fawazahmed0/currency-api via jsDelivr CDN
+ *   - Fully open, no API key, explicit CORS support
+ *   - Updated daily
+ *   - URL: https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json
+ *   - Fallback: https://latest.currency-api.pages.dev/v1/currencies/usd.json
  *
  * Exports:
- *   getFXRates()              → { USD: 1, TWD: 0.0308, IDR: 0.0000621 }
+ *   getFXRates()                   → { USD:1, TWD:0.031, IDR:0.000062 }
  *   convertToUSD(amount, currency) → number in USD
- *   refreshFXRates()          → async, fetches live rates and re-renders
+ *   refreshFXRates()               → async, fetches live rates and re-renders
  */
-
-const FRANKFURTER_URL = 'https://api.frankfurter.dev/v2/rates?base=USD';
 
 function getFXRates() {
   const twdPerUsd = parseFloat(document.getElementById('fx-twd').value) || CONFIG.DEFAULT_FX.TWD;
@@ -33,11 +31,6 @@ function convertToUSD(amount, currency) {
   return parseFloat(amount || 0) * rate;
 }
 
-/**
- * Fetches live USD → TWD and USD → IDR rates from Frankfurter.
- * Tries v2 first, falls back to stable v1 if needed.
- * Handles both response shapes: { data: {} } (v2) and { rates: {} } (v1).
- */
 async function refreshFXRates() {
   const btn      = document.getElementById('btn-refresh-fx');
   const statusEl = document.getElementById('fx-refresh-status');
@@ -49,45 +42,41 @@ async function refreshFXRates() {
   if (btn) { btn.disabled = true; btn.textContent = '⟳'; }
   setStatus('Fetching…');
 
+  // Two mirrors of the same dataset — try in order
   const ENDPOINTS = [
-    'https://api.frankfurter.dev/v2/rates?base=USD',
-    'https://api.frankfurter.app/latest?base=USD',
+    'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json',
+    'https://latest.currency-api.pages.dev/v1/currencies/usd.json',
   ];
 
-  let twd = null, idr = null, usedEndpoint = '';
+  let twd = null, idr = null;
 
   for (const url of ENDPOINTS) {
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-
-      // v2 uses { data: { TWD: x, IDR: x } }, v1 uses { rates: { TWD: x, IDR: x } }
-      const rateMap = data?.data ?? data?.rates;
-      if (!rateMap) throw new Error('No rate map in response');
-
-      twd = rateMap['TWD'];
-      idr = rateMap['IDR'];
-      if (!twd || !idr) throw new Error(`TWD or IDR missing from response`);
-
-      usedEndpoint = url;
-      break; // success — stop trying
+      // Response shape: { "date": "...", "usd": { "twd": 32.5, "idr": 16300, ... } }
+      const rates = data?.usd;
+      if (!rates) throw new Error(`No "usd" key — got: ${Object.keys(data).join(', ')}`);
+      twd = rates['twd'];
+      idr = rates['idr'];
+      if (!twd || !idr) throw new Error(`twd=${twd} idr=${idr}`);
+      break; // success
     } catch (err) {
-      console.warn(`FX endpoint failed (${url}):`, err.message);
+      console.warn(`[fx] ${url} failed:`, err.message);
     }
   }
 
   if (!twd || !idr) {
-    setStatus('✗ All FX endpoints failed — using saved rates', '#c0392b');
+    setStatus('✗ Could not fetch live rates — using saved rates', '#c0392b');
     if (btn) { btn.disabled = false; btn.textContent = '⟳ Live rates'; }
     return;
   }
 
-  // Update inputs
+  // fawazahmed0 gives USD→TWD directly (same as Frankfurter convention)
   document.getElementById('fx-twd').value = twd.toFixed(4);
   document.getElementById('fx-idr').value = Math.round(idr);
 
-  // Persist and re-render everything
   saveFXRates(twd, idr);
   renderStocks(appData.stocks);
   renderSection('emergency',  appData.emergency);
@@ -97,6 +86,5 @@ async function refreshFXRates() {
 
   const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   setStatus(`✓ Updated at ${time}`, 'var(--accent)');
-
   if (btn) { btn.disabled = false; btn.textContent = '⟳ Live rates'; }
 }

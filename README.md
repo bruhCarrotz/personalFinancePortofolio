@@ -11,7 +11,7 @@ _Dynamic Pricing for TW, ID stocks are in progress._
 
 **2026/05/05** : Functional Dynamic Pricing for US Portofolio
 
-**2026/05/04** : Local Storage & File‑Based Portfolio Sync
+**2026/05/04** : Functional Local Storage & File‑Based Portfolio Sync
 
 **2026/04/30** : Functional and Visual Improvements
 

@@ -4,7 +4,7 @@ A personal net worth dashboard for tracking investments, emergency fund, retirem
 
 ## Documentation & Fixes
 **2026/05/07**: Dynamic Pricing for TW, ID stocks
-In certain instances, API might not be able to fetch live prices due to paywall limitations.
+* In certain instances, the API might not be able to fetch live prices due to live data blocked by API-provider paywall.
 
 **2026/05/06** : Functional Dynamic Pricing for FX
 

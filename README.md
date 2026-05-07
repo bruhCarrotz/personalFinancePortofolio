@@ -3,7 +3,8 @@
 A personal net worth dashboard for tracking investments, emergency fund, retirement, and cash across multiple currencies. This project is designed for GitHub Pages and runs entirely in the browser.
 
 ## Documentation & Fixes
-_Dynamic Pricing for TW, ID stocks are in progress._
+**2026/05/07**: Dynamic Pricing for TW, ID stocks
+In certain instances, API might not be able to fetch live prices due to paywall limitations.
 
 **2026/05/06** : Functional Dynamic Pricing for FX
 
